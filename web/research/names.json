@@ -1,0 +1,480 @@
+{
+  "amps": [
+    {
+      "id": "0x00",
+      "code": "DELUXE CL VIBRATO",
+      "original": "Fender Deluxe Reverb (blackface, '65), kanál Vibrato",
+      "confidence": "secondary",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L537 (VT100X OM p.10-12)",
+        "https://voxamps.com/wp-content/uploads/2019/12/VT20X_VT40X_OM_EFGSJ1_WEB.pdf",
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L131",
+        "https://tonebucket.com/resources"
+      ],
+      "vox": "dual channel, 22W blackface 60's design ... 6V6 ... based on the Vibrato channel of this amp"
+    },
+    {
+      "id": "0x01",
+      "code": "DELUXE CL NORMAL",
+      "original": "Fender Deluxe Reverb (blackface, '65), kanál Normal",
+      "confidence": "secondary",
+      "source": [
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L137",
+        "https://tonebucket.com/resources"
+      ],
+      "note": "VT-X manuál popisuje jen kanál Vibrato; Normal je kanál stejného ampu (Tone Room)."
+    },
+    {
+      "id": "0x02",
+      "code": "TWEED 4x10 BRIGHT",
+      "original": "Fender Bassman 4x10 (tweed, 1959), kanál Bright",
+      "confidence": "secondary",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L541 (VT100X OM p.10-12)",
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L143",
+        "https://tonebucket.com/resources"
+      ],
+      "vox": "a 4x10\" combo amp from 1959 that was originally designed for bass guitar"
+    },
+    {
+      "id": "0x03",
+      "code": "TWEED 4x10 NORMAL",
+      "original": "Fender Bassman 4x10 (tweed, 1959), kanál Normal",
+      "confidence": "secondary",
+      "source": [
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L149",
+        "https://tonebucket.com/resources"
+      ]
+    },
+    {
+      "id": "0x04",
+      "code": "BOUTIQUE CL",
+      "original": "Dumble Overdrive Special, čistý kanál",
+      "confidence": "secondary",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L572 (VT100X OM p.10-12)",
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L155",
+        "https://tonebucket.com/resources"
+      ],
+      "vox": "clean channel of a high-quality amp that was produced only on special order ... known as the overdrive special",
+      "note": "VOX uvádí název 'Overdrive Special' bez značky; 'Dumble' je ze sekundárních zdrojů."
+    },
+    {
+      "id": "0x05",
+      "code": "BOUTIQUE OD",
+      "original": "Dumble Overdrive Special, overdrive kanál",
+      "confidence": "secondary",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L549 (VT100X OM p.10-12)",
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L161",
+        "https://tonebucket.com/resources"
+      ],
+      "vox": "overdrive channel of a high-quality amp that was known as the Overdrive Special, which was produced only by special order"
+    },
+    {
+      "id": "0x06",
+      "code": "VOX AC30",
+      "original": "VOX AC30, kanál Normal (repro Celestion Alnico Blue)",
+      "confidence": "official",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L545 (VT100X OM p.10-12)",
+        "https://voxamps.com/wp-content/uploads/2019/12/VT20X_VT40X_OM_EFGSJ1_WEB.pdf"
+      ],
+      "vox": "This models the Normal channel of the AC30 ... Celestion alnico \"Blue\" speaker"
+    },
+    {
+      "id": "0x07",
+      "code": "VOX AC30TB",
+      "original": "VOX AC30 Top Boost (1964)",
+      "confidence": "official",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L554 (VT100X OM p.10-12)",
+        "https://voxamps.com/wp-content/uploads/2019/12/VT20X_VT40X_OM_EFGSJ1_WEB.pdf"
+      ],
+      "vox": "an AC30 amp with the \"top boost\" circuit of the 1964 AC30"
+    },
+    {
+      "id": "0x08",
+      "code": "BRIT 1959 TREBLE",
+      "original": "Marshall 1959 Super Lead 100W (\"Plexi\"), kanál High Treble",
+      "confidence": "secondary",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L577 (VT100X OM p.10-12)",
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L181",
+        "https://tonebucket.com/resources"
+      ],
+      "vox": "high treble channel of a classic hand-wired head made in England during the early 60's ... 100W",
+      "note": "Librarian uvádí 'Marshall JTM', ToneBucket 'Super Lead Plexi'; '1959' = typové číslo Marshall 1959 Super Lead."
+    },
+    {
+      "id": "0x09",
+      "code": "BRIT 1959 NORMAL",
+      "original": "Marshall 1959 Super Lead 100W (\"Plexi\"), kanál Normal",
+      "confidence": "secondary",
+      "source": [
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L187",
+        "https://tonebucket.com/resources"
+      ]
+    },
+    {
+      "id": "0x0A",
+      "code": "BRIT 800",
+      "original": "Marshall JCM800 (2203, 1983)",
+      "confidence": "secondary",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L558 (VT100X OM p.10-12)",
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L193",
+        "https://tonebucket.com/resources"
+      ],
+      "vox": "a British 100W single-channel head with master volume that was made in 1983"
+    },
+    {
+      "id": "0x0B",
+      "code": "BRIT VM",
+      "original": "Marshall JVM410H",
+      "confidence": "secondary",
+      "source": [
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L199",
+        "https://tonebucket.com/resources"
+      ],
+      "note": "Jen v Tone Room; VT-X manuál model nepopisuje. ToneBucket: kanál OD2."
+    },
+    {
+      "id": "0x0C",
+      "code": "SL-OD",
+      "original": "Soldano SLO-100, overdrive kanál",
+      "confidence": "secondary",
+      "source": [
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L205",
+        "https://tonebucket.com/resources"
+      ],
+      "note": "Jen v Tone Room; VT-X manuál model nepopisuje."
+    },
+    {
+      "id": "0x0D",
+      "code": "DOUBLE REC",
+      "original": "Mesa/Boogie Dual Rectifier, high-gain kanál",
+      "confidence": "secondary",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L567 (VT100X OM p.10-12)",
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L211",
+        "https://tonebucket.com/resources"
+      ],
+      "vox": "the modern high-gain channel from a wild beast of an amp"
+    },
+    {
+      "id": "0x0E",
+      "code": "CALI ELATION",
+      "original": "Bogner Ecstasy, kanál 3",
+      "confidence": "secondary",
+      "source": [
+        "https://tonebucket.com/resources"
+      ],
+      "note": "Jediný zdroj (ToneBucket); Librarian značku neuvádí. Brát s rezervou."
+    },
+    {
+      "id": "0x0F",
+      "code": "ERUPT III CH2",
+      "original": "EVH 5150III, kanál 2",
+      "confidence": "secondary",
+      "source": [
+        "https://tonebucket.com/resources",
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L223"
+      ],
+      "note": "Librarian píše 'Peavy 5150 III' (chyba: 5150III je značka EVH; Peavey dělal 5150/5150 II)."
+    },
+    {
+      "id": "0x10",
+      "code": "ERUPT III CH3",
+      "original": "EVH 5150III, kanál 3",
+      "confidence": "secondary",
+      "source": [
+        "https://tonebucket.com/resources",
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L229"
+      ]
+    },
+    {
+      "id": "0x11",
+      "code": "BOUTIQUE METAL",
+      "original": "Diezel VH4, kanál \"Heavy\"",
+      "confidence": "secondary",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L582 (VT100X OM p.10-12)",
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L235",
+        "https://tonebucket.com/resources"
+      ],
+      "vox": "a German-made 100W four-channel amp head. We chose the \"Heavy\" channel"
+    },
+    {
+      "id": "0x12",
+      "code": "BRIT OR MKII",
+      "original": "Orange Rockerverb 100 MkII, kanál Dirty",
+      "confidence": "secondary",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L562 (VT100X OM p.10-12)",
+        "https://tonebucket.com/resources"
+      ],
+      "vox": "a distinctly colored British 100W head that features two channels and a tube driven spring reverb",
+      "note": "Librarian (L241) uvádí 'Orange Super Crush 100' (tranzistorový, bez lampového reverbu: s popisem VOX nesedí). Rockerverb MkII sedí."
+    },
+    {
+      "id": "0x13",
+      "code": "ORIGINAL CL",
+      "original": "vlastní čistý zvuk VOX (bez předlohy)",
+      "confidence": "secondary",
+      "source": [
+        "https://github.com/tmarsteel/vox-amp-librarian/blob/c9799506ca2a9af934dd81d4eddd49892618e167/src/main/kotlin/com/github/tmarsteel/voxamplibrarian/appmodel/amps.kt#L247",
+        "https://tonebucket.com/resources"
+      ],
+      "note": "Librarian: 'No additional simulation, just the VTX amp'."
+    }
+  ],
+  "pedal1": [
+    {
+      "id": "0x00",
+      "code": "COMP",
+      "original": "obecný kompresor (předloha neuvedena)",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L592 (VT100X OM p.10-12)"
+      ],
+      "vox": "a compressor that produces a clean, percussive and mellow sustain"
+    },
+    {
+      "id": "0x01",
+      "code": "CHORUS",
+      "original": "pravděpodobně analogový chorus typu Boss CE",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L608 (VT100X OM p.10-12)",
+        "https://medias.audiofanzine.com/files/vtx150neodymium-om-e2-479210.pdf"
+      ],
+      "vox": "a classic lush analog chorus unit",
+      "note": "Starší VOX (VTX150/VT+) mají 'CE CHORUS': 'a standard rich-sounding analog chorus unit'."
+    },
+    {
+      "id": "0x02",
+      "code": "TUBE OD",
+      "original": "pravděpodobně Ibanez Tube Screamer (TS808/TS9)",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L620 (VT100X OM p.10-12)",
+        "https://www.voxshowroom.com/ct/manuals/VT+.pdf",
+        "https://medias.audiofanzine.com/files/vtx150neodymium-om-e2-479210.pdf"
+      ],
+      "vox": "a well-known overdrive pedal in a green box"
+    },
+    {
+      "id": "0x03",
+      "code": "GOLD DRIVE",
+      "original": "pravděpodobně Klon Centaur",
+      "confidence": "inferred",
+      "source": [
+        "https://www.voxshowroom.com/ct/manuals/VT+.pdf",
+        "https://medias.audiofanzine.com/files/vtx150neodymium-om-e2-479210.pdf"
+      ],
+      "vox": "an overdrive unit named after a half-human half-horse creature from Greek mythology",
+      "note": "Popis ze starších VOX manuálů (stejný název efektu); kentaur = Centaur."
+    },
+    {
+      "id": "0x04",
+      "code": "TREBLE BOOST",
+      "original": "pravděpodobně VOX VBM-1 (treble booster, styl Dallas Rangemaster)",
+      "confidence": "inferred",
+      "source": [
+        "https://www.voxshowroom.com/ct/manuals/VT+.pdf",
+        "https://medias.audiofanzine.com/files/vtx150neodymium-om-e2-479210.pdf"
+      ],
+      "vox": "the treble booster built into the VOX VBM-1, which was designed for use with the VOX AC30",
+      "note": "Citace z VT+/VTX150 (stejný název efektu); u VT-X VOX nepotvrzuje."
+    },
+    {
+      "id": "0x05",
+      "code": "RC TURBO",
+      "original": "neznámá předloha (snad Xotic RC Booster)",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VTX_Midi_Impl.txt:L519 (jen kódové jméno)"
+      ],
+      "note": "Žádný oficiální ani sekundární popis nenalezen. Odhad jen podle názvu."
+    },
+    {
+      "id": "0x06",
+      "code": "ORANGE DIST",
+      "original": "pravděpodobně Boss DS-1",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L632 (VT100X OM p.10-12)",
+        "https://www.voxshowroom.com/ct/manuals/VT+.pdf"
+      ],
+      "vox": "a classic Japanese-made distortion unit in an orange box"
+    },
+    {
+      "id": "0x07",
+      "code": "FAT DIST",
+      "original": "neznámá předloha (snad distortion ve stylu ProCo RAT)",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VTX_Midi_Impl.txt:L546 (jen kódové jméno)"
+      ],
+      "note": "Žádný popis nenalezen. Odhad slabý."
+    },
+    {
+      "id": "0x08",
+      "code": "BRIT LEAD",
+      "original": "neznámá předloha (snad Marshall pedál, např. Guv'nor)",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VTX_Midi_Impl.txt:L548 (jen kódové jméno)"
+      ],
+      "note": "Žádný popis nenalezen. Odhad jen podle názvu."
+    },
+    {
+      "id": "0x09",
+      "code": "FUZZ",
+      "original": "pravděpodobně fuzz ve stylu Fuzz Face",
+      "confidence": "inferred",
+      "source": [
+        "https://www.voxshowroom.com/ct/manuals/VT+.pdf",
+        "https://medias.audiofanzine.com/files/vtx150neodymium-om-e2-479210.pdf"
+      ],
+      "vox": "Retro, brazen and rough-edged.",
+      "note": "Popis ze starších VOX manuálů; předlohu VOX neuvádí."
+    }
+  ],
+  "pedal2": [
+    {
+      "id": "0x00",
+      "code": "FLANGER",
+      "original": "pravděpodobně MXR M-117 Flanger (EVH)",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L599 (VT100X OM p.10-12)"
+      ],
+      "vox": "a truly classic analog flanger that's associated with ... \"the godfather of two-handed tapping.\"",
+      "note": "Narážka na Eddie Van Halena."
+    },
+    {
+      "id": "0x01",
+      "code": "BLACK PHASER",
+      "original": "neznámá předloha (analogový phaser v černé krabičce)",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VTX_Midi_Impl.txt:L608 (jen kódové jméno)"
+      ],
+      "note": "Žádný popis nenalezen."
+    },
+    {
+      "id": "0x02",
+      "code": "ORANGE PHASER 1",
+      "original": "pravděpodobně MXR Phase 90",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L615 (VT100X OM p.10-12)",
+        "https://www.voxshowroom.com/ct/manuals/VT+.pdf"
+      ],
+      "vox": "a popular analog phaser in an orange box",
+      "note": "VT+/VTX150 píšou 'banana-colored box'; Cambridge50 'orange-colored box'."
+    },
+    {
+      "id": "0x03",
+      "code": "ORANGE PHASER 2",
+      "original": "pravděpodobně MXR Phase 90 (jiná varianta, snad script/block)",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VTX_Midi_Impl.txt:L612 (jen kódové jméno)"
+      ],
+      "note": "Rozdíl proti ORANGE PHASER 1 nikde nepopsán."
+    },
+    {
+      "id": "0x04",
+      "code": "TREMOLO",
+      "original": "pravděpodobně tremolo z Fender Twin Reverb",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L624 (VT100X OM p.10-12)",
+        "https://medias.audiofanzine.com/files/vtx150neodymium-om-e2-479210.pdf"
+      ],
+      "vox": "the acclaimed tremolo circuit built into a classic American amp",
+      "note": "VTX150 má stejný popis pod názvem 'TWIN TREM'."
+    },
+    {
+      "id": "0x05",
+      "code": "TAPE ECHO",
+      "original": "pravděpodobně Roland RE-201 Space Echo",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L643 (VT100X OM p.10-12)",
+        "https://www.voxshowroom.com/ct/manuals/VT+.pdf"
+      ],
+      "vox": "an acclaimed analog tape echo ... the delay time was specified by changing the speed of the motor",
+      "note": "Odhad: zpoždění řízené rychlostí motoru sedí na Space Echo; může jít i o Echoplex."
+    },
+    {
+      "id": "0x06",
+      "code": "ANALOG DELAY",
+      "original": "analogový BBD delay (např. Boss DM-2)",
+      "confidence": "inferred",
+      "source": [
+        "https://www.voxshowroom.com/ct/manuals/VT+.pdf",
+        "https://medias.audiofanzine.com/files/vtx150neodymium-om-e2-479210.pdf"
+      ],
+      "vox": "an analog delay that uses a Bucket Brigade Device (BBD) ... lo-fi, but ... warm",
+      "note": "Popis ze starších VOX manuálů; konkrétní předlohu VOX neuvádí."
+    }
+  ],
+  "reverb": [
+    {
+      "id": "0x00",
+      "code": "ROOM",
+      "original": "obecný pokojový reverb (bez předlohy)",
+      "confidence": "official",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L651 (VT100X OM p.10-12)"
+      ],
+      "vox": "a typical room that contains numerous early reflections"
+    },
+    {
+      "id": "0x01",
+      "code": "SPRING",
+      "original": "pružinový reverb vestavěný v kytarových comba (obecně)",
+      "confidence": "official",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L654 (VT100X OM p.10-12)"
+      ],
+      "vox": "the spring reverb that's built into many guitar amps"
+    },
+    {
+      "id": "0x02",
+      "code": "HALL",
+      "original": "obecný sálový reverb (bez předlohy)",
+      "confidence": "official",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L656 (VT100X OM p.10-12)"
+      ],
+      "vox": "the reverberation and echo of a large concert hall"
+    },
+    {
+      "id": "0x03",
+      "code": "PLATE",
+      "original": "studiový deskový reverb (pravděpodobně styl EMT 140)",
+      "confidence": "inferred",
+      "source": [
+        "(VOX manual text) VT100X_OM.txt:L658 (VT100X OM p.10-12)"
+      ],
+      "vox": "a classic plate reverb unit usually found in recording studios",
+      "note": "VOX říká jen 'classic plate reverb'; EMT 140 je odhad."
+    }
+  ],
+  "disclaimer": {
+    "text": "All product names and company names are the trademarks or registered trademarks of their respective owners.",
+    "source": "(VOX manual text) VT100X_OM.txt:L137 (VT100X OM p.3); totéž VT20X/VT40X OM (https://voxamps.com/wp-content/uploads/2019/12/VT20X_VT40X_OM_EFGSJ1_WEB.pdf), VT+ OM, VTX150 OM",
+    "note": "VOX ve VT-X manuálech značky předloh nejmenuje, jen je opisuje ('This models ...'). Značky výše jsou dekódované ze sekundárních zdrojů nebo odhadnuté.",
+    "uiCs": "Názvy výrobků a firem jsou ochranné známky nebo registrované ochranné známky svých vlastníků. Uvedené předlohy jsou neoficiální, slouží jen k popisu charakteru zvuku."
+  },
+  "confidenceLegend": {
+    "official": "VOX/KORG originál přímo jmenuje nebo jednoznačně popisuje (jen VOX vlastní ampy a generické reverby)",
+    "secondary": "značku uvádí sekundární zdroj (vox-amp-librarian, ToneBucket) a sedí s popisem VOX",
+    "inferred": "odhad z popisu VOX nebo z názvu; v UI zobrazovat jako 'pravděpodobně'"
+  }
+}

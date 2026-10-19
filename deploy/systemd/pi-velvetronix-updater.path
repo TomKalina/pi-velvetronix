@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch for staged pi-velvetronix update requests
+
+[Path]
+PathExists=/var/lib/pi-velvetronix/inbox/request
+Unit=pi-velvetronix-updater.service
+
+[Install]
+WantedBy=multi-user.target

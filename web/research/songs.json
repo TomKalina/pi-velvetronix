@@ -1,0 +1,2362 @@
+[
+  {
+    "id": "ramones-blitzkrieg-bop",
+    "title": "Blitzkrieg Bop",
+    "artist": "Ramones",
+    "year": 1976,
+    "genre": "punk",
+    "description_cs": "Suchý, hrubý „buzzsaw“ downstroke: Johnny Ramone hrál Mosrite přímo do Marshallu Super Lead bez pedálů, proto jen BRIT 1959 TREBLE s vyšším gainem a žádné efekty. Je to přiblížení, singlecoily Mosritu model nenahradí.",
+    "source": "https://mixdownmag.com.au/features/rig-rundown-the-ramones/",
+    "amp": {
+      "model": 8,
+      "gain": 70,
+      "treble": 65,
+      "middle": 60,
+      "bass": 55,
+      "presence": 55,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 20,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "sex-pistols-anarchy-in-the-uk",
+    "title": "Anarchy in the U.K.",
+    "artist": "Sex Pistols",
+    "year": 1976,
+    "genre": "punk",
+    "description_cs": "Steve Jones hrál Les Paul Custom do naplno vytočeného Fender Twin Reverbu, zkreslení dělal hlavně zesilovač a humbuckery. VT100X Twin nemá, takže fenderovský DELUXE CL VIBRATO s vysokým gainem a jemný TUBE OD jako náhrada „tlaku“ humbuckeru.",
+    "source": "https://www.gearnews.com/get-that-sex-pistols-tone-steve-jones-guitar-rig",
+    "amp": {
+      "model": 0,
+      "gain": 80,
+      "treble": 70,
+      "middle": 70,
+      "bass": 55,
+      "presence": 55,
+      "resonance": 45,
+      "brightCap": 1,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 2,
+      "ampClass": 1
+    },
+    "nr": 25,
+    "pedal1": {
+      "on": true,
+      "type": 2,
+      "params": [
+        35,
+        55,
+        55,
+        55,
+        60,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": true,
+      "type": 1,
+      "params": [
+        8,
+        25,
+        0,
+        50,
+        60
+      ]
+    }
+  },
+  {
+    "id": "the-clash-london-calling",
+    "title": "London Calling",
+    "artist": "The Clash",
+    "year": 1979,
+    "genre": "punk",
+    "description_cs": "Mick Jones nahrával s Les Paulem přes kombo Mesa/Boogie Mark I do Marshall 4x12, takže středně zkreslený, středový zvuk na modelu CALI ELATION. Přiblížení, Mark I přesně v nabídce není.",
+    "source": "https://guitar.com/features/artist-rigs/gear-used-by-joe-strummer-mick-jones-the-clash-london-calling/",
+    "amp": {
+      "model": 14,
+      "gain": 45,
+      "treble": 60,
+      "middle": 60,
+      "bass": 50,
+      "presence": 55,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 20,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": true,
+      "type": 0,
+      "params": [
+        10,
+        20,
+        10,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "the-stooges-search-and-destroy",
+    "title": "Search and Destroy",
+    "artist": "Iggy and the Stooges",
+    "year": 1973,
+    "genre": "punk",
+    "description_cs": "James Williamson zapojil Les Paul Custom do kanálu Top Boost u Vox AC30 s volume naplno a staženými basy, bez pedálů. Proto VOX AC30TB, třída A, hodně gainu a málo basů.",
+    "source": "https://www.premierguitar.com/artists/james-williamson-raw-power",
+    "amp": {
+      "model": 7,
+      "gain": 85,
+      "treble": 70,
+      "middle": 55,
+      "bass": 30,
+      "presence": 45,
+      "resonance": 40,
+      "brightCap": 1,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 2,
+      "ampClass": 0
+    },
+    "nr": 20,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "dead-kennedys-holiday-in-cambodia",
+    "title": "Holiday in Cambodia",
+    "artist": "Dead Kennedys",
+    "year": 1980,
+    "genre": "punk",
+    "description_cs": "East Bay Ray: kopie Telecasteru do Fender Super Reverb a páskové echo Echoplex, reverb na zesilovači vypnutý kvůli čistotě. Tady fenderovský DELUXE CL NORMAL s mírným zkreslením, TAPE ECHO a bez reverbu.",
+    "source": "https://guitarworld.com/features/east-bay-ray-dead-kennedys-holiday-in-cambodia",
+    "amp": {
+      "model": 1,
+      "gain": 55,
+      "treble": 65,
+      "middle": 50,
+      "bass": 45,
+      "presence": 60,
+      "resonance": 40,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 15,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": true,
+      "type": 5,
+      "params": [
+        380,
+        30,
+        25,
+        45,
+        10,
+        10
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "buzzcocks-ever-fallen-in-love",
+    "title": "Ever Fallen in Love (With Someone You Shouldn't've)",
+    "artist": "Buzzcocks",
+    "year": 1978,
+    "genre": "punk",
+    "description_cs": "Melodický britský punk s jasným, středovým crunchem. Konkrétní aparát nahrávky nemám ověřený, takže jde o stylové přiblížení na Marshallu Plexi (BRIT 1959 NORMAL).",
+    "source": null,
+    "amp": {
+      "model": 9,
+      "gain": 60,
+      "treble": 60,
+      "middle": 65,
+      "bass": 50,
+      "presence": 55,
+      "resonance": 45,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 15,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": true,
+      "type": 0,
+      "params": [
+        8,
+        20,
+        10,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "the-damned-new-rose",
+    "title": "New Rose",
+    "artist": "The Damned",
+    "year": 1976,
+    "genre": "punk",
+    "description_cs": "Rychlý, ostrý a trochu špinavý zvuk prvního britského punkového singlu. Aparát neověřen; stylově Plexi s treble boosterem, který zvedne výšky a sustain.",
+    "source": null,
+    "amp": {
+      "model": 8,
+      "gain": 72,
+      "treble": 60,
+      "middle": 65,
+      "bass": 50,
+      "presence": 60,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 25,
+    "pedal1": {
+      "on": true,
+      "type": 4,
+      "params": [
+        40,
+        60,
+        50,
+        60,
+        50,
+        40
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "misfits-last-caress",
+    "title": "Last Caress",
+    "artist": "Misfits",
+    "year": 1980,
+    "genre": "punk",
+    "description_cs": "Hutný, temnější „horror punk“ s plnými basy. Aparát nahrávky neověřen; stylové přiblížení na BRIT 800 se středním gainem.",
+    "source": null,
+    "amp": {
+      "model": 10,
+      "gain": 65,
+      "treble": 60,
+      "middle": 55,
+      "bass": 60,
+      "presence": 55,
+      "resonance": 55,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 2,
+      "ampClass": 1
+    },
+    "nr": 30,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "stiff-little-fingers-alternative-ulster",
+    "title": "Alternative Ulster",
+    "artist": "Stiff Little Fingers",
+    "year": 1978,
+    "genre": "punk",
+    "description_cs": "Naléhavý severoirský punk s hlasitým, ale čitelným zkreslením. Aparát neověřen; Plexi s jemným GOLD DRIVE pro víc šťávy při zachování dynamiky.",
+    "source": null,
+    "amp": {
+      "model": 8,
+      "gain": 68,
+      "treble": 62,
+      "middle": 62,
+      "bass": 52,
+      "presence": 55,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 25,
+    "pedal1": {
+      "on": true,
+      "type": 3,
+      "params": [
+        25,
+        55,
+        50,
+        55,
+        60,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "green-day-basket-case",
+    "title": "Basket Case",
+    "artist": "Green Day",
+    "year": 1994,
+    "genre": "pop-punk",
+    "description_cs": "Dookie zvuk stojí na upraveném Marshallu 1959SLP (tzv. Dookie mod s extra gainem). Proto BRIT 1959 TREBLE s vysokým gainem a TUBE OD s nízkým drive jako náhrada přidaného zesilovacího stupně.",
+    "source": "https://www.marshall.com/ad/en/backstage/articles/the-dookie-mod",
+    "amp": {
+      "model": 8,
+      "gain": 80,
+      "treble": 60,
+      "middle": 60,
+      "bass": 60,
+      "presence": 55,
+      "resonance": 55,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 2,
+      "ampClass": 1
+    },
+    "nr": 30,
+    "pedal1": {
+      "on": true,
+      "type": 2,
+      "params": [
+        20,
+        55,
+        55,
+        55,
+        60,
+        45
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "green-day-american-idiot",
+    "title": "American Idiot",
+    "artist": "Green Day",
+    "year": 2004,
+    "genre": "pop-punk",
+    "description_cs": "Les Paul Junior s P-90 do Marshallu „Idiot Amp“ upraveného o další gain stage. Přiblížení na BRIT 800 s mid boostem a lehkým TUBE OD.",
+    "source": "https://www.guitarworld.com/features/green-day-billie-joe-armstrong-on-the-making-of-american-idiot",
+    "amp": {
+      "model": 10,
+      "gain": 75,
+      "treble": 60,
+      "middle": 60,
+      "bass": 55,
+      "presence": 55,
+      "resonance": 55,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 1,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 35,
+    "pedal1": {
+      "on": true,
+      "type": 2,
+      "params": [
+        25,
+        50,
+        50,
+        50,
+        55,
+        45
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "descendents-hope",
+    "title": "Hope",
+    "artist": "Descendents",
+    "year": 1982,
+    "genre": "pop-punk",
+    "description_cs": "Prapředek pop-punku: rychlé akordy, syrový crunch bez efektů. Aparát neověřen; stylové přiblížení na Plexi.",
+    "source": null,
+    "amp": {
+      "model": 8,
+      "gain": 70,
+      "treble": 65,
+      "middle": 55,
+      "bass": 50,
+      "presence": 55,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 25,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "blink-182-all-the-small-things",
+    "title": "All the Small Things",
+    "artist": "blink-182",
+    "year": 1999,
+    "genre": "pop-punk",
+    "description_cs": "Enema of the State vznikla hlavně s Mesa Boogie Rectifier a Marshallem JCM900. DOUBLE REC se středním gainem dá hutný, ale čistý pop-punkový rytmus.",
+    "source": "https://www.bonedo.de/artikel/die-besten-gitarrenriffs-in-noten-und-tabs-blink-182-all-the-small-things",
+    "amp": {
+      "model": 13,
+      "gain": 62,
+      "treble": 60,
+      "middle": 50,
+      "bass": 60,
+      "presence": 55,
+      "resonance": 60,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 35,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "blink-182-whats-my-age-again",
+    "title": "What's My Age Again?",
+    "artist": "blink-182",
+    "year": 1999,
+    "genre": "pop-punk",
+    "description_cs": "Stejná éra (Rectifier + JCM900), tady s důrazem na marshallovský díl: BRIT 800 s mid boostem pro ostřejší, „kousavější“ akordy.",
+    "source": "https://www.bonedo.de/artikel/die-besten-gitarrenriffs-in-noten-und-tabs-blink-182-whats-my-age-again-workshop",
+    "amp": {
+      "model": 10,
+      "gain": 72,
+      "treble": 60,
+      "middle": 55,
+      "bass": 55,
+      "presence": 60,
+      "resonance": 55,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 1,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 35,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "the-offspring-self-esteem",
+    "title": "Self Esteem",
+    "artist": "The Offspring",
+    "year": 1994,
+    "genre": "pop-punk",
+    "description_cs": "Na Smash kapela sdílela jeden Mesa/Boogie Mark IV. CALI ELATION s vyšším gainem a plnějšími basy je nejbližší dostupný model.",
+    "source": "https://guitarplayer.com/players/behind-the-offspring-hit-come-out-and-play",
+    "amp": {
+      "model": 14,
+      "gain": 70,
+      "treble": 55,
+      "middle": 50,
+      "bass": 60,
+      "presence": 55,
+      "resonance": 60,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 35,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "the-offspring-come-out-and-play",
+    "title": "Come Out and Play",
+    "artist": "The Offspring",
+    "year": 1994,
+    "genre": "pop-punk",
+    "description_cs": "Stejný Mesa Mark IV jako na celém Smash, s jasnějšími výškami pro surf/orientální riff a trochou pružinového dozvuku. Přiblížení.",
+    "source": "https://guitarplayer.com/players/behind-the-offspring-hit-come-out-and-play",
+    "amp": {
+      "model": 14,
+      "gain": 65,
+      "treble": 65,
+      "middle": 55,
+      "bass": 50,
+      "presence": 60,
+      "resonance": 55,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 30,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": true,
+      "type": 1,
+      "params": [
+        12,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "sum-41-fat-lip",
+    "title": "Fat Lip",
+    "artist": "Sum 41",
+    "year": 2001,
+    "genre": "pop-punk",
+    "description_cs": "Deryck Whibley v té době používal Mesa Dual Rectifier (komunitní zdroj, ne oficiální). DOUBLE REC s hutnými basy a vyšším noise reduction.",
+    "source": "https://equipboard.com/albums/sum-41-all-killer-no-filler",
+    "amp": {
+      "model": 13,
+      "gain": 70,
+      "treble": 60,
+      "middle": 50,
+      "bass": 60,
+      "presence": 55,
+      "resonance": 60,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 40,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "fall-out-boy-sugar-were-goin-down",
+    "title": "Sugar, We're Goin Down",
+    "artist": "Fall Out Boy",
+    "year": 2005,
+    "genre": "pop-punk",
+    "description_cs": "Moderní, kompresní pop-punk s hodně gainu a výraznými středy. Aparát neověřen; stylové přiblížení na BRIT VM s lehkým TUBE OD.",
+    "source": null,
+    "amp": {
+      "model": 11,
+      "gain": 70,
+      "treble": 60,
+      "middle": 55,
+      "bass": 55,
+      "presence": 60,
+      "resonance": 55,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 40,
+    "pedal1": {
+      "on": true,
+      "type": 2,
+      "params": [
+        15,
+        55,
+        50,
+        50,
+        55,
+        45
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "nofx-linoleum",
+    "title": "Linoleum",
+    "artist": "NOFX",
+    "year": 1994,
+    "genre": "skate-punk",
+    "description_cs": "Rychlý skate punk s hustým, ale „sevřeným“ zkreslením. Aparát neověřen; BRIT 800 dotlačený TUBE OD s nízkým drive, který zpevní basy.",
+    "source": null,
+    "amp": {
+      "model": 10,
+      "gain": 78,
+      "treble": 60,
+      "middle": 50,
+      "bass": 60,
+      "presence": 55,
+      "resonance": 60,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 40,
+    "pedal1": {
+      "on": true,
+      "type": 2,
+      "params": [
+        15,
+        50,
+        55,
+        50,
+        55,
+        45
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "bad-religion-21st-century-digital-boy",
+    "title": "21st Century (Digital Boy)",
+    "artist": "Bad Religion",
+    "year": 1994,
+    "genre": "skate-punk",
+    "description_cs": "Brett Gurewitz uvádí ve studiu hlavně Marshall JCM800 (a starší JMP) do boxu s Vintage 30. BRIT 800 s mid boostem; zdroj se týká pozdější desky, takže jde o přiblížení.",
+    "source": "https://www.premierguitar.com/interview-brett-gurewitz-of-bad-religion",
+    "amp": {
+      "model": 10,
+      "gain": 70,
+      "treble": 60,
+      "middle": 65,
+      "bass": 55,
+      "presence": 55,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 1,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 35,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "pennywise-bro-hymn",
+    "title": "Bro Hymn (Tribute)",
+    "artist": "Pennywise",
+    "year": 1997,
+    "genre": "skate-punk",
+    "description_cs": "Fletcher Dragge hraje přes Mesa Dual Rectifier (a VHT Pittbull). DOUBLE REC s vyšším gainem, staženými středy a mohutnými basy pro sborový hymnus.",
+    "source": "https://equipboard.com/pros/fletcher-dragge",
+    "amp": {
+      "model": 13,
+      "gain": 75,
+      "treble": 60,
+      "middle": 45,
+      "bass": 65,
+      "presence": 55,
+      "resonance": 65,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 45,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "millencolin-no-cigar",
+    "title": "No Cigar",
+    "artist": "Millencolin",
+    "year": 2000,
+    "genre": "skate-punk",
+    "description_cs": "Švédský skate punk s jasným, rytmicky přesným zkreslením. Aparát neověřen; BRIT 800 s jemným TUBE OD.",
+    "source": null,
+    "amp": {
+      "model": 10,
+      "gain": 70,
+      "treble": 62,
+      "middle": 55,
+      "bass": 55,
+      "presence": 55,
+      "resonance": 55,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 35,
+    "pedal1": {
+      "on": true,
+      "type": 2,
+      "params": [
+        20,
+        55,
+        50,
+        55,
+        55,
+        45
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "black-flag-rise-above",
+    "title": "Rise Above",
+    "artist": "Black Flag",
+    "year": 1981,
+    "genre": "hardcore",
+    "description_cs": "Greg Ginn hrál Dan Armstrong s přetočenými humbuckery do tranzistorových zesilovačů, zvuk je ostrý a „pilovitý“. VT100X tranzistorák nemá, proto BRIT 800 s menším gainem a FAT DIST. Zdroj je fanouškovský výzkum.",
+    "source": "https://forum.fractalaudio.com/threads/recreating-black-flags-damaged-tones.201167",
+    "amp": {
+      "model": 10,
+      "gain": 60,
+      "treble": 70,
+      "middle": 55,
+      "bass": 50,
+      "presence": 65,
+      "resonance": 45,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 40,
+    "pedal1": {
+      "on": true,
+      "type": 7,
+      "params": [
+        55,
+        55,
+        45,
+        60,
+        55,
+        45
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "minor-threat-minor-threat",
+    "title": "Minor Threat",
+    "artist": "Minor Threat",
+    "year": 1981,
+    "genre": "hardcore",
+    "description_cs": "Washingtonský hardcore: rychlý, suchý a hlasitý Marshall JCM800 (údaj platí pro kapelu obecně, ne přímo pro tuto nahrávku). BRIT 800 bez pedálů.",
+    "source": "https://equipboard.com/band/minor-threat",
+    "amp": {
+      "model": 10,
+      "gain": 75,
+      "treble": 65,
+      "middle": 60,
+      "bass": 55,
+      "presence": 60,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 40,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "bad-brains-banned-in-dc",
+    "title": "Banned in D.C.",
+    "artist": "Bad Brains",
+    "year": 1982,
+    "genre": "hardcore",
+    "description_cs": "Dr. Know začínal na zesilovačích Acoustic a upravených Marshallech. Přiblížení: Plexi dotlačené RC TURBO pro extrémně rychlé, ostré riffy.",
+    "source": "https://www.guitarplayer.com/gear/how-do-you-get-the-sickest-punk-guitar-tones-dr-know-offers-his-best-advice",
+    "amp": {
+      "model": 8,
+      "gain": 78,
+      "treble": 65,
+      "middle": 55,
+      "bass": 55,
+      "presence": 60,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 2,
+      "ampClass": 1
+    },
+    "nr": 45,
+    "pedal1": {
+      "on": true,
+      "type": 5,
+      "params": [
+        45,
+        55,
+        45,
+        55,
+        55,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "gorilla-biscuits-start-today",
+    "title": "Start Today",
+    "artist": "Gorilla Biscuits",
+    "year": 1989,
+    "genre": "hardcore",
+    "description_cs": "Newyorský hardcore konce 80. let s hutným, „sevřeným“ zkreslením. Aparát neověřen; BRIT 800 s TUBE OD jako zpevňovačem basů a vysokým noise reduction.",
+    "source": null,
+    "amp": {
+      "model": 10,
+      "gain": 80,
+      "treble": 60,
+      "middle": 50,
+      "bass": 65,
+      "presence": 55,
+      "resonance": 60,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 45,
+    "pedal1": {
+      "on": true,
+      "type": 2,
+      "params": [
+        10,
+        50,
+        50,
+        50,
+        55,
+        40
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "suicidal-tendencies-institutionalized",
+    "title": "Institutionalized",
+    "artist": "Suicidal Tendencies",
+    "year": 1983,
+    "genre": "hardcore",
+    "description_cs": "Skate/hardcore klasika s hustým a středově výrazným zkreslením. Aparát neověřen; stylové přiblížení na SL-OD.",
+    "source": null,
+    "amp": {
+      "model": 12,
+      "gain": 60,
+      "treble": 60,
+      "middle": 55,
+      "bass": 55,
+      "presence": 55,
+      "resonance": 55,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 40,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "rancid-time-bomb",
+    "title": "Time Bomb",
+    "artist": "Rancid",
+    "year": 1995,
+    "genre": "ska-punk",
+    "description_cs": "Ska údery na offbeat potřebují jasný crunch s nízkým gainem, aby „cvakaly“. Podle neověřeného zdroje producent Jerry Finn použil marshallovský Dookie zesilovač, proto BRIT 1959 NORMAL s menším gainem a málo basů.",
+    "source": "https://equipboard.com/albums/rancid-and-out-come-the-wolves",
+    "amp": {
+      "model": 9,
+      "gain": 50,
+      "treble": 65,
+      "middle": 65,
+      "bass": 40,
+      "presence": 60,
+      "resonance": 40,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 15,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": true,
+      "type": 0,
+      "params": [
+        10,
+        20,
+        10,
+        60,
+        40
+      ]
+    }
+  },
+  {
+    "id": "operation-ivy-knowledge",
+    "title": "Knowledge",
+    "artist": "Operation Ivy",
+    "year": 1989,
+    "genre": "ska-punk",
+    "description_cs": "Raný ska-punk z East Bay: lehce špinavé offbeaty a punkové refrény. Aparát neověřen; VOX AC30TB se středním gainem drží výšky a dynamiku.",
+    "source": null,
+    "amp": {
+      "model": 7,
+      "gain": 60,
+      "treble": 65,
+      "middle": 60,
+      "bass": 40,
+      "presence": 45,
+      "resonance": 40,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 0
+    },
+    "nr": 20,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "mighty-mighty-bosstones-the-impression-that-i-get",
+    "title": "The Impression That I Get",
+    "artist": "The Mighty Mighty Bosstones",
+    "year": 1997,
+    "genre": "ska-punk",
+    "description_cs": "Ska-core s dechy a hutnějšími kytarami v refrénu. Aparát neověřen; kompromis mezi čistými offbeaty a refrénem na BRIT 800 se středním gainem.",
+    "source": null,
+    "amp": {
+      "model": 10,
+      "gain": 62,
+      "treble": 60,
+      "middle": 60,
+      "bass": 50,
+      "presence": 55,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 30,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "reel-big-fish-sell-out",
+    "title": "Sell Out",
+    "artist": "Reel Big Fish",
+    "year": 1996,
+    "genre": "ska-punk",
+    "description_cs": "Typický 90s ska-punk má jasný, středový tón s menším gainem, než se zdá, aby offbeaty zněly perkusivně. BRIT 800 s mid boostem a staženými basy (podle diskuse kytaristů, ne podle aparátu kapely).",
+    "source": "https://forum.seymourduncan.com/threads/the-perfect-ska-punk-distortion.223405",
+    "amp": {
+      "model": 10,
+      "gain": 50,
+      "treble": 65,
+      "middle": 70,
+      "bass": 40,
+      "presence": 60,
+      "resonance": 40,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 1,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 20,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "visaci-zamek-traktor",
+    "title": "Traktor",
+    "artist": "Visací zámek",
+    "year": 1990,
+    "genre": "czech-punk",
+    "description_cs": "Klasický český punk s jednoduchými akordy a poctivým crunchem. Aparát kapely neověřen; stylové přiblížení na Plexi se středně vysokým gainem.",
+    "source": null,
+    "amp": {
+      "model": 8,
+      "gain": 65,
+      "treble": 60,
+      "middle": 60,
+      "bass": 55,
+      "presence": 55,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 20,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": true,
+      "type": 0,
+      "params": [
+        8,
+        20,
+        10,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "plexis-svet-jsou-bary",
+    "title": "Svět jsou bary",
+    "artist": "Plexis",
+    "year": 1990,
+    "genre": "czech-punk",
+    "description_cs": "Česká verze písně Pet Sematary od Ramones, takže ramonesovský přístup: Plexi bez pedálů, jen o něco víc basů. Aparát kapely neověřen.",
+    "source": null,
+    "amp": {
+      "model": 8,
+      "gain": 70,
+      "treble": 62,
+      "middle": 60,
+      "bass": 58,
+      "presence": 55,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 20,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "tri-sestry-extraliga",
+    "title": "Extraliga",
+    "artist": "Tři sestry",
+    "year": 2000,
+    "genre": "czech-punk",
+    "description_cs": "Hospodský punk'n'roll s plným, ale nepřehnaným zkreslením. Aparát neověřen; stylové přiblížení na BRIT 800.",
+    "source": null,
+    "amp": {
+      "model": 10,
+      "gain": 65,
+      "treble": 60,
+      "middle": 60,
+      "bass": 55,
+      "presence": 55,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 30,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "e-e-poslouchej",
+    "title": "Poslouchej",
+    "artist": "E!E",
+    "year": 1993,
+    "genre": "czech-punk",
+    "description_cs": "Příbramský punk 90. let, ostřejší a špinavější. Aparát neověřen; Plexi s ORANGE DIST (krabička typu DS-1 byla tehdy běžná).",
+    "source": null,
+    "amp": {
+      "model": 8,
+      "gain": 55,
+      "treble": 60,
+      "middle": 60,
+      "bass": 55,
+      "presence": 55,
+      "resonance": 50,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 35,
+    "pedal1": {
+      "on": true,
+      "type": 6,
+      "params": [
+        45,
+        55,
+        45,
+        55,
+        55,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "hudba-praha-vsechno-je-naopak",
+    "title": "Všechno je naopak",
+    "artist": "Hudba Praha",
+    "year": null,
+    "genre": "czech-punk",
+    "description_cs": "Rockovější crunch na pomezí punku a big beatu Michala Ambrože. Aparát i rok nahrávky neověřeny; přiblížení na VOX AC30TB s trochou pružinového dozvuku.",
+    "source": null,
+    "amp": {
+      "model": 7,
+      "gain": 60,
+      "treble": 60,
+      "middle": 60,
+      "bass": 50,
+      "presence": 50,
+      "resonance": 45,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 0
+    },
+    "nr": 15,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": true,
+      "type": 1,
+      "params": [
+        12,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "sto-zvirat-praha",
+    "title": "Praha",
+    "artist": "Sto zvířat",
+    "year": null,
+    "genre": "czech-punk",
+    "description_cs": "Česká ska legenda: čisté, jasné offbeaty s minimem zkreslení a lehkým pružinovým dozvukem. Aparát i rok neověřeny; DELUXE CL VIBRATO na hraně čistoty.",
+    "source": null,
+    "amp": {
+      "model": 0,
+      "gain": 35,
+      "treble": 65,
+      "middle": 55,
+      "bass": 40,
+      "presence": 55,
+      "resonance": 40,
+      "brightCap": 1,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 10,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": true,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        5,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "rolling-stones-satisfaction",
+    "title": "(I Can't Get No) Satisfaction",
+    "artist": "The Rolling Stones",
+    "year": 1965,
+    "genre": "rock",
+    "description_cs": "Keith Richards nahrál riff s fuzzem Maestro FZ-1 původně jen jako náčrt pro dechy. FUZZ pedál do téměř čistého DELUXE CL NORMAL; je to přiblížení germaniového fuzzu.",
+    "source": "https://theconversation.com/i-cant-get-no-satisfaction-50-years-later-the-song-that-almost-never-was-42796",
+    "amp": {
+      "model": 1,
+      "gain": 35,
+      "treble": 55,
+      "middle": 55,
+      "bass": 50,
+      "presence": 50,
+      "resonance": 45,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 25,
+    "pedal1": {
+      "on": true,
+      "type": 9,
+      "params": [
+        70,
+        55,
+        50,
+        55,
+        50,
+        45
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": true,
+      "type": 1,
+      "params": [
+        10,
+        25,
+        0,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "ac-dc-highway-to-hell",
+    "title": "Highway to Hell",
+    "artist": "AC/DC",
+    "year": 1979,
+    "genre": "rock",
+    "description_cs": "Angus Young hraje SG do Marshallu Super Lead s překvapivě nízkým zkreslením; zdroj popisuje éru Back in Black, Highway to Hell je velmi blízko. BRIT 1959 NORMAL se středním gainem a suchou místností.",
+    "source": "https://reverb.com/news/tony-platt-shares-secret-angus-young-back-in-black-tone",
+    "amp": {
+      "model": 9,
+      "gain": 55,
+      "treble": 60,
+      "middle": 65,
+      "bass": 50,
+      "presence": 55,
+      "resonance": 45,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 15,
+    "pedal1": {
+      "on": false,
+      "type": 2,
+      "params": [
+        30,
+        50,
+        50,
+        50,
+        50,
+        50
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": true,
+      "type": 0,
+      "params": [
+        10,
+        20,
+        10,
+        50,
+        50
+      ]
+    }
+  },
+  {
+    "id": "nirvana-smells-like-teen-spirit",
+    "title": "Smells Like Teen Spirit",
+    "artist": "Nirvana",
+    "year": 1991,
+    "genre": "rock",
+    "description_cs": "Kurt Cobain: preamp Mesa/Boogie Studio a Boss DS-1 jako hlavní zkreslení. CALI ELATION s nízkým gainem jako čistý základ a ORANGE DIST; chorus z předrefrénu nejde přidat, protože CHORUS sdílí slot s distortion.",
+    "source": "https://www.guitarworld.com/amp/features/the-secrets-behind-kurt-cobains-guitar-tone-on-nirvanas-smells-like-teen-spirit",
+    "amp": {
+      "model": 14,
+      "gain": 30,
+      "treble": 55,
+      "middle": 45,
+      "bass": 60,
+      "presence": 55,
+      "resonance": 55,
+      "brightCap": 0,
+      "lowCut": 0,
+      "midBoost": 0,
+      "bias": 0,
+      "ampClass": 1
+    },
+    "nr": 40,
+    "pedal1": {
+      "on": true,
+      "type": 6,
+      "params": [
+        65,
+        50,
+        50,
+        55,
+        40,
+        55
+      ]
+    },
+    "pedal2": {
+      "on": false,
+      "type": 5,
+      "params": [
+        350,
+        25,
+        20,
+        50,
+        0,
+        0
+      ]
+    },
+    "reverb": {
+      "on": false,
+      "type": 1,
+      "params": [
+        15,
+        30,
+        0,
+        50,
+        50
+      ]
+    }
+  }
+]

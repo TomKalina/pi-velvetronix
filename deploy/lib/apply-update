@@ -1,0 +1,161 @@
+#!/bin/sh
+# Root oneshot started by pi-velvetronix-updater.path once the daemon has written
+# inbox/request. Installs the staged release inbox/<ver>/, or swaps current and
+# previous when the request is "rollback", then restarts the service.
+# Never executes anything from the inbox. The inbox belongs to the daemon user, so
+# the files are copied into a root-owned directory first and verified there.
+# Root-written state (pending, applying, last-result) lives in the root-owned $U;
+# in the daemon-owned $S nothing is written, only renamed out of or removed.
+set -eu
+B=/opt/pi-velvetronix
+S=/var/lib/pi-velvetronix
+IN=$S/inbox
+U=/var/lib/pi-velvetronix-update
+R=$U/last-result
+A=''
+D=''
+T=''
+
+result() {
+    printf '%s\n' "$1" > "$R.tmp"
+    mv -T "$R.tmp" "$R"
+}
+
+# Exits 0: the request is already consumed, so the path unit must not re-trigger.
+fail() {
+    [ -z "$D" ] || rm -rf "$D"
+    [ -z "$T" ] || rm -rf "$T"
+    result "failed $1"
+    echo "apply-update: failed $1" >&2
+    exit 0
+}
+
+# An unexpected error under set -e (e.g. ENOSPC) still leaves a result and no temp
+# copies. fail() and the normal paths exit 0, so this runs only for those errors.
+cleanup() {
+    rc=$?
+    [ -z "$A" ] || rm -f "$U/applying"
+    [ "$rc" -ne 0 ] || return 0
+    trap - EXIT
+    set +e
+    [ -z "$D" ] || rm -rf "$D"
+    [ -z "$T" ] || rm -rf "$T"
+    # Not consumed yet: remove it so the path unit does not re-trigger forever.
+    [ -n "$A" ] || rm -f request
+    result "failed io-error"
+    echo "apply-update: failed io-error (exit $rc)" >&2
+}
+trap cleanup EXIT
+
+# setlink NAME TARGET: replace symlink $B/NAME atomically (rename over the old one).
+setlink() {
+    ln -sfn "$2" "$B/$1.new"
+    mv -T "$B/$1.new" "$B/$1"
+}
+
+restart() {
+    sync
+    systemctl restart --no-block pi-velvetronix.service
+}
+
+install -d -m 0755 "$U"
+# The daemon owns $S and could swap inbox for a symlink (e.g. to /etc), which would
+# point the rm -rf below elsewhere. Work inside the real directory with relative
+# paths, which a later swap of the inbox entry cannot redirect.
+{ [ -d "$IN" ] && [ ! -L "$IN" ]; } || exit 0
+cd "$IN"
+[ "$(pwd -P)" = "$IN" ] || fail bad-inbox
+[ -e request ] || [ -L request ] || exit 0
+if [ -L request ] || [ ! -f request ]; then
+    rm -rf request
+    fail bad-request
+fi
+# Moving the request (instead of deleting it) stops the path unit re-triggering while the
+# daemon keeps seeing "applying" and leaves the bridge paused until the restart. A link
+# swapped in after the check above is moved as a link, so it is checked again here.
+mv -f request "$U/applying"
+A=1
+if [ -L "$U/applying" ] || [ ! -f "$U/applying" ]; then
+    rm -rf "$U/applying"
+    fail bad-request
+fi
+ver=$(head -c 64 "$U/applying" | LC_ALL=C tr -cd '0-9A-Za-z._-')
+
+if [ "$ver" = rollback ]; then
+    { [ -L "$B/current" ] && [ -L "$B/previous" ]; } || fail no-previous
+    cur=$(readlink "$B/current")
+    prev=$(readlink "$B/previous")
+    { [ "$cur" != "$prev" ] && [ -f "$B/$prev/pi-velvetronix" ]; } || fail no-previous
+    setlink current "$prev"
+    setlink previous "$cur"
+    # The target was confirmed when it ran before; counting it again could ping-pong.
+    rm -f "$U/pending"
+    result "rolled-back ${cur#releases/} -> $prev"
+    echo "apply-update: manual rollback ${cur#releases/} -> $prev" >&2
+    restart
+    exit 0
+fi
+
+case "$ver" in '' | .* | request) fail bad-version ;; esac
+D=$ver
+# Never overwrite the running release or the only rollback target.
+for l in current previous; do
+    [ "$(readlink "$B/$l" 2>/dev/null || true)" != "releases/$ver" ] || fail version-in-use
+done
+{ [ -d "$D" ] && [ ! -L "$D" ] && [ -f "$D/manifest.json" ] && [ -f "$D/pi-velvetronix" ]; } ||
+    fail missing-files
+
+# cp -P copies a symlink as a symlink, so a link swapped in after the check above
+# is caught below instead of being followed.
+mkdir -p "$B/releases"
+rm -rf "$B"/releases/.*.tmp
+T=$B/releases/.$ver.tmp
+mkdir -m 0700 "$T"
+cp -P "$D/manifest.json" "$D/pi-velvetronix" "$T/"
+m=$T/manifest.json
+f=$T/pi-velvetronix
+for x in "$m" "$f"; do
+    { [ -f "$x" ] && [ ! -L "$x" ]; } || fail not-regular
+done
+
+want=$(sed -n 's/.*"sha256"[[:space:]]*:[[:space:]]*"\([0-9a-f]\{64\}\)".*/\1/p' "$m")
+have=$(sha256sum "$f" | cut -d' ' -f1)
+{ [ -n "$want" ] && [ "$want" = "$have" ]; } || fail sha256
+mver=$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([0-9A-Za-z._-]*\)".*/\1/p' "$m")
+[ "$mver" = "$ver" ] || fail version-mismatch
+[ "$(od -An -tx1 -N4 "$f" | tr -d ' \n')" = 7f454c46 ] || fail not-elf
+[ "$(od -An -tx1 -j4 -N2 "$f" | tr -d ' \n')" = 0201 ] || fail not-elf64-le
+[ "$(od -An -tx1 -j18 -N2 "$f" | tr -d ' \n')" = b700 ] || fail not-aarch64
+
+chown root:root "$T" "$m" "$f"
+chmod 0644 "$m"
+chmod 0755 "$f" "$T"
+rm -rf "$B/releases/$ver"
+mv -T "$T" "$B/releases/$ver"
+T=''
+rm -rf "$D"
+D=''
+
+# pending first: a power cut right after the swap still leaves the release unconfirmed.
+# The old release's marker must not confirm the new one.
+rm -f "$S/confirmed"
+printf '%s 0\n' "$ver" > "$U/pending.tmp"
+mv -T "$U/pending.tmp" "$U/pending"
+# Release files and pending must be on disk before current points at them.
+sync
+old=$(readlink "$B/current" 2>/dev/null || true)
+[ -z "$old" ] || setlink previous "$old"
+setlink current "releases/$ver"
+result "installed $ver"
+echo "apply-update: installed $ver (previous: ${old:-none})" >&2
+
+# Keep only current + previous.
+cur=$(readlink "$B/current")
+prev=$(readlink "$B/previous" 2>/dev/null || true)
+for d in "$B"/releases/*; do
+    [ -e "$d" ] || continue
+    r=releases/${d##*/}
+    [ "$r" = "$cur" ] || [ "$r" = "$prev" ] || rm -rf "$d"
+done
+
+restart

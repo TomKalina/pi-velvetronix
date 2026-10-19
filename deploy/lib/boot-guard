@@ -1,0 +1,64 @@
+#!/bin/sh
+# Runs as root (ExecStartPre=+) before every start of pi-velvetronix.service.
+# Counts start attempts of an unconfirmed release (pending) and rolls back to
+# previous after MAX attempts. The daemon confirms a release after its self-check by
+# writing its version to $S/confirmed; a matching marker drops pending uncounted.
+# Writes only into the root-owned $U; the daemon-owned $S is only read, after a
+# regular-file check. Exits 0 on every expected path: a failing guard fails the start.
+set -eu
+umask 022
+B=/opt/pi-velvetronix
+S=/var/lib/pi-velvetronix
+U=/var/lib/pi-velvetronix-update
+P=$U/pending
+R=$U/last-result
+C=$S/confirmed
+MAX=3
+
+# A power cut during apply-update leaves applying behind. It only means something
+# while the updater runs (a oneshot is "activating" until it exits).
+if [ -e "$U/applying" ] || [ -L "$U/applying" ]; then
+    [ "$(systemctl show -P ActiveState pi-velvetronix-updater.service 2> /dev/null || true)" = activating ] ||
+        rm -f "$U/applying"
+fi
+
+[ -e "$P" ] || [ -L "$P" ] || exit 0
+if [ -L "$P" ] || [ ! -f "$P" ]; then
+    rm -f "$P"
+    exit 0
+fi
+ver='' attempts=''
+read -r ver attempts < "$P" || true
+ver=$(printf '%s' "$ver" | LC_ALL=C tr -cd '0-9A-Za-z._-' | cut -c 1-64)
+if [ -z "$ver" ]; then
+    rm -f "$P"
+    exit 0
+fi
+case "$attempts" in '' | *[!0-9]*) attempts=0 ;; esac
+[ "${#attempts}" -le 3 ] || attempts=0
+
+if [ -f "$C" ] && [ ! -L "$C" ]; then
+    conf=$(head -c 64 "$C" | LC_ALL=C tr -cd '0-9A-Za-z._-')
+    if [ "$conf" = "$ver" ]; then
+        rm -f "$P"
+        echo "boot-guard: $ver confirmed" >&2
+        exit 0
+    fi
+fi
+attempts=$((attempts + 1))
+
+if [ "$attempts" -gt "$MAX" ] && [ -L "$B/previous" ]; then
+    prev=$(readlink "$B/previous")
+    ln -sfn "$prev" "$B/current.new"
+    mv -T "$B/current.new" "$B/current"
+    rm -f "$P"
+    printf 'rolled-back %s -> %s\n' "$ver" "$prev" > "$R.tmp"
+    mv -T "$R.tmp" "$R"
+    sync
+    echo "boot-guard: rollback, $ver unconfirmed after $MAX attempts, back to $prev" >&2
+else
+    printf '%s %s\n' "$ver" "$attempts" > "$P.tmp"
+    mv -T "$P.tmp" "$P"
+    echo "boot-guard: $ver unconfirmed, start attempt $attempts" >&2
+fi
+exit 0

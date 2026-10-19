@@ -1,0 +1,20 @@
+# Go
+/bin/
+/dist/
+*.test
+/internal/web/dist/index.html.gz
+coverage.out
+
+# Web
+web/node_modules/
+web/dist/
+coverage/
+*.log
+
+# Secrets and local device data: never commit
+.env
+.env.*
+secrets/
+*.secret
+
+.DS_Store
