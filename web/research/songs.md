@@ -12,8 +12,8 @@ One-click tone presets for the VOX VT100X. Values are raw amp scale (knobs 0-100
 | hardcore | 5 |
 | ska-punk | 4 |
 | czech-punk | 6 |
-| rock | 3 |
-| **total** | **40** |
+| rock | 4 |
+| **total** | **41** |
 
 ## punk
 
@@ -89,6 +89,7 @@ One-click tone presets for the VOX VT100X. Values are raw amp scale (knobs 0-100
 | The Rolling Stones - (I Can't Get No) Satisfaction | 1965 | DELUXE CL NORMAL 35/55/55/50 | FUZZ | off | SPRING | 25 | Gibson Firebird -> Maestro FZ-1 Fuzz-Tone | [link](https://theconversation.com/i-cant-get-no-satisfaction-50-years-later-the-song-that-almost-never-was-42796) |
 | AC/DC - Highway to Hell | 1979 | BRIT 1959 NORMAL 55/60/65/50 | off | off | ROOM | 15 | Gibson SG -> Marshall 1959 Super Lead (Back in Black era, Tony Platt) | [link](https://reverb.com/news/tony-platt-shares-secret-angus-young-back-in-black-tone) |
 | Nirvana - Smells Like Teen Spirit | 1991 | CALI ELATION 30/55/45/60 | ORANGE DIST | off | off | 40 | Mesa/Boogie Studio preamp + Crown power amp, Boss DS-1, EHX Small Clone | [link](https://www.guitarworld.com/amp/features/the-secrets-behind-kurt-cobains-guitar-tone-on-nirvanas-smells-like-teen-spirit) |
+| The White Stripes - Seven Nation Army | 2003 | TWEED 4x10 NORMAL 45/65/55/60 | FUZZ | off | off | 30 | Kay K6533 archtop (neck single coil) -> DigiTech Whammy (octave down) -> EHX Big Muff -> Silvertone 1485; no octave effect on the amp | [link](https://www.guitarworld.com/gear/secrets-behind-jack-white-guitar-sound-white-stripes-seven-nation-army) |
 
 ## Notes
 

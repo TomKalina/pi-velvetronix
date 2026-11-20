@@ -141,6 +141,8 @@ export class VoxClient {
   private timer: Timer | null = null;
   private hold: { id: number; remaining: number; timer: Timer } | null = null;
   private auditioning = false;
+  /** Watch mode: nothing can be sent; the model follows the other controller's traffic. */
+  private observing = false;
   private state: AmpState = initialState();
   private listeners: ((s: AmpState) => void)[] = [];
   private readonly setT: (cb: () => void, ms: number) => Timer;
@@ -313,6 +315,38 @@ export class VoxClient {
     return result;
   }
 
+  /**
+   * Watch mode on/off. While on, the model is kept up to date from the controllers' frames
+   * (peerFrame) and from the amp's replies to them, and no request is ever sent.
+   */
+  setObserving(on: boolean): void {
+    this.observing = on;
+  }
+
+  /**
+   * A frame another controller (tab, browser, MCP server) sent to the amp. Its live edits, program
+   * selects and saves are applied here too; its reads are ignored.
+   */
+  peerFrame(frame: Uint8Array): void {
+    const fn = funcOf(frame);
+    if (fn === FN.PARAMETER_CHANGE && frame.length === 12) {
+      this.applyLocal(frame);
+    } else if (fn === FN.MODE_CHANGE && frame.length === 10 && frame[8] < USER_SLOTS) {
+      // 4E 00 pp loads the slot into the Current Buffer.
+      this.setMode("user", frame[8]);
+      if (this.observing) {
+        // No requests while watching: show the cached slot; the controller's re-read reply follows.
+        this.state.current = this.state.slots[frame[8]] ?? null;
+        this.emit();
+      } else {
+        this.refreshCurrent(true);
+      }
+    } else if (fn === FN.PROGRAM_DUMP) {
+      const p = parse(frame);
+      if (p.kind === "program") this.setSlot(p.slot, p.program);
+    }
+  }
+
   /** Drops queue, in-flight request and state (transport reconnect). */
   reset(): void {
     if (this.timer !== null) this.clearT(this.timer);
@@ -410,7 +444,16 @@ export class VoxClient {
     switch (p.kind) {
       case "param": return this.onParamNotification(p.id, p.sub, p.value);
       case "mode_change": return this.onModeChange(p.mode, p.program);
-      case "write_completed": return this.refreshSlot(p.slot);
+      case "write_completed": return this.observing ? undefined : this.refreshSlot(p.slot);
+    }
+    if (this.observing) {
+      // Replies to the other controller's reads keep the model current.
+      if (p.kind === "mode") this.setMode(p.mode, p.program);
+      else if (p.kind === "current_program") {
+        this.state.current = p.program;
+        this.emit();
+      } else if (p.kind === "program") this.setSlot(p.slot, p.program);
+      return;
     }
     const r = this.inflight;
     const outcome = r && match(r.frame, p);
@@ -427,6 +470,11 @@ export class VoxClient {
   }
 
   private onModeChange(mode: Mode, program: number): void {
+    if (this.observing) {
+      // Turned on the amp's panel: no request is possible, the controller's re-read reaches us as a reply.
+      this.setMode(mode, program);
+      return;
+    }
     const prog = mode === "manual" ? null : program;
     const same = this.state.mode === mode && this.state.program === prog;
     const reading = this.inflight?.key === READ_KEY_CURRENT || this.queue.some((r) => r.key === READ_KEY_CURRENT);

@@ -3,6 +3,8 @@
 /dist/
 *.test
 /internal/web/dist/index.html.gz
+/internal/web/dist/manifest.webmanifest
+/internal/web/dist/*.png
 coverage.out
 
 # Web

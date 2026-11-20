@@ -75,6 +75,31 @@ describe("AmpSync", () => {
     expect(c.reads).toBe(2);
   });
 
+  it("resync reads again even while a read runs, and only the newest result counts", async () => {
+    const { c, pending } = fakeClient();
+    const s = new AmpSync(c, () => {});
+    s.resync(); // not live: nothing to read
+    expect(c.reads).toBe(0);
+    s.update(true);
+    s.resync();
+    expect(c.reads).toBe(2);
+    pending[0].resolve(STATE); // stale
+    await Promise.resolve();
+    expect(s.ready).toBe(false);
+    pending[1].resolve(STATE);
+    await Promise.resolve();
+    expect(s.ready).toBe(true);
+  });
+
+  it("keeps the model while watching instead of resetting it", async () => {
+    const { c } = fakeClient();
+    const s = new AmpSync(c, () => {});
+    s.update(true);
+    s.update(false, true);
+    expect(c.resets).toBe(0);
+    expect(s.reading).toBe(false);
+  });
+
   it("does not retry while the link is down", () => {
     const { c } = fakeClient();
     const s = new AmpSync(c, () => {});

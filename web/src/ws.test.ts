@@ -3,7 +3,10 @@ import { VoxClient } from "./protocol/client";
 import { msg } from "./protocol/messages";
 import { decodeProgram } from "./protocol/program";
 import { hex, VECTOR_A_STRUCT } from "./protocol/testutil";
-import { backoffMs, BUSY_CLOSE_CODE, PING_INTERVAL_MS, REPLACED_CLOSE_CODE, WsTransport, type ConnState, type SocketLike } from "./ws";
+import {
+  backoffMs, BUSY_CLOSE_CODE, FREE_CLOSE_CODE, PING_INTERVAL_MS, REPLACED_CLOSE_CODE, TAKEN_CLOSE_CODE, WATCH_DELAY_MS, WsTransport,
+  type ConnState, type SocketLike,
+} from "./ws";
 
 class FakeSocket implements SocketLike {
   binaryType: BinaryType = "blob";
@@ -141,24 +144,32 @@ describe("WsTransport", () => {
     expect(t.connState).toEqual({ kind: "waiting", retryInMs: 1000 });
   });
 
-  it("stays busy after {t:busy} + close and does not reconnect until retry()", () => {
+  it("watches after {t:busy} + 4001 and takes control once the server says free", () => {
     t.start();
     last().text({ t: "busy" });
     last().serverClose(BUSY_CLOSE_CODE);
-    expect(t.connState.kind).toBe("busy");
-    vi.advanceTimersByTime(120_000);
-    expect(sockets.length).toBe(1);
-    t.retry();
+    expect(t.connState.kind).toBe("watching");
+    vi.advanceTimersByTime(WATCH_DELAY_MS);
     expect(sockets.length).toBe(2);
-    expect(t.connState.kind).toBe("connecting");
+    expect(last().url).toBe("ws://test/ws?watch=1");
+    last().text({ t: "hello", version: "x" });
+    last().text({ t: "watching" });
+    expect(t.connState.kind).toBe("watching");
+    expect(() => t.send(Uint8Array.of(0xf0, 0xf7), false)).toThrow("not connected");
+    last().text({ t: "free" });
+    last().serverClose(FREE_CLOSE_CODE);
+    expect(sockets.length).toBe(3);
+    expect(last().url).toBe("ws://test/ws");
+    last().text({ t: "hello", version: "x" });
+    expect(t.connState.kind).toBe("open");
   });
 
-  it("treats close code 4001 alone as busy", () => {
+  it("treats close code 4001 alone as busy and watches", () => {
     t.start();
     last().serverClose(BUSY_CLOSE_CODE);
-    expect(t.connState.kind).toBe("busy");
-    vi.advanceTimersByTime(60_000);
-    expect(sockets.length).toBe(1);
+    expect(t.connState.kind).toBe("watching");
+    vi.advanceTimersByTime(WATCH_DELAY_MS);
+    expect(last().url).toBe("ws://test/ws?watch=1");
   });
 
   it("stays replaced after {t:replaced} + 4002 and does not reconnect until retry()", () => {
@@ -188,10 +199,55 @@ describe("WsTransport", () => {
     expect(sockets.length).toBe(2);
   });
 
-  it("does not report busy for a later normal disconnect after retry", () => {
+  it("delivers other controllers' frames, and watches after {t:taken} + 4003", () => {
+    connect();
+    const echoes: number[][] = [];
+    const frames: number[][] = [];
+    t.onEcho((f) => echoes.push([...f]));
+    t.onFrame((f) => frames.push([...f]));
+    last().binary([0x02, 0xf0, 0x00, 0xf7]); // also while controlling
+    last().text({ t: "taken" });
+    last().serverClose(TAKEN_CLOSE_CODE);
+    expect(t.connState.kind).toBe("watching");
+    vi.advanceTimersByTime(WATCH_DELAY_MS);
+    last().text({ t: "hello", version: "x" });
+    last().text({ t: "watching" });
+    last().binary([0x02, 0xf0, 0x01, 0xf7]);
+    last().binary([0x00, 0xf0, 0x02, 0xf7]);
+    expect(echoes).toEqual([[0xf0, 0x00, 0xf7], [0xf0, 0x01, 0xf7]]);
+    expect(frames).toEqual([[0xf0, 0x02, 0xf7]]);
+    // A watch socket that drops reconnects in watch mode.
+    last().serverClose(1006);
+    vi.advanceTimersByTime(1000);
+    expect(last().url).toBe("ws://test/ws?watch=1");
+  });
+
+  it("goes back to watching when it loses the race for a freed slot", () => {
     t.start();
     last().serverClose(BUSY_CLOSE_CODE);
-    t.retry();
+    vi.advanceTimersByTime(WATCH_DELAY_MS);
+    last().serverClose(FREE_CLOSE_CODE);
+    last().serverClose(BUSY_CLOSE_CODE);
+    expect(t.connState.kind).toBe("watching");
+    const n = sockets.length;
+    vi.advanceTimersByTime(WATCH_DELAY_MS);
+    expect(sockets.length).toBe(n + 1);
+  });
+
+  it("stop() cancels watching", () => {
+    connect();
+    last().serverClose(TAKEN_CLOSE_CODE);
+    t.stop();
+    vi.advanceTimersByTime(60_000);
+    expect(sockets.length).toBe(1);
+    expect(t.connState.kind).toBe("idle");
+  });
+
+  it("does not watch after a later normal disconnect", () => {
+    t.start();
+    last().serverClose(BUSY_CLOSE_CODE);
+    vi.advanceTimersByTime(WATCH_DELAY_MS);
+    last().serverClose(FREE_CLOSE_CODE);
     last().text({ t: "hello", version: "x" });
     last().serverClose(1006);
     expect(t.connState.kind).toBe("waiting");

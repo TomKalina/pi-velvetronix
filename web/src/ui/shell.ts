@@ -12,7 +12,9 @@ import { createWifi } from "./wifi";
 interface Screen {
   id: string;
   title: string;
-  view: { el: HTMLElement; render(): void; show?(): void; hide?(): void };
+  /** Tail of the tab title hidden in the compact header. */
+  more?: string;
+  view: { el: HTMLElement; render(): void; show?(): void; hide?(): void; toolbar?: HTMLElement };
 }
 
 export function createShell(ctx: Ctx): { el: HTMLElement; render(): void; destroy(): void } {
@@ -21,15 +23,29 @@ export function createShell(ctx: Ctx): { el: HTMLElement; render(): void; destro
     { id: "ovladani", title: "Ovládání", view: createControl(ctx) },
     { id: "pisnicky", title: "Písničky", view: createSongs(ctx) },
     { id: "wifi", title: "Wi-Fi", view: createWifi(ctx) },
-    { id: "aktualizace", title: "Aktualizace firmwaru", view: createUpdate(ctx) },
+    { id: "aktualizace", title: "Aktualizace", more: " firmwaru", view: createUpdate(ctx) },
     { id: "info", title: "Info", view: createInfo(ctx) },
   ];
-  const tabs = screens.map((s) => h("a", { href: `#${s.id}`, class: "tab" }, s.title));
+  const tabs = screens.map((s) =>
+    h("a", { href: `#${s.id}`, class: "tab" }, s.title, ...(s.more ? [h("span", { class: "tab-more" }, s.more)] : [])),
+  );
   const main = h("main", null, ...screens.map((s) => s.view.el));
+  // From 700 px wide the current screen's toolbar sits in the header line; below that, atop its screen.
+  const headTools = h("div", { class: "head-tools" });
+  const wide = window.matchMedia("(min-width: 700px)");
+  function placeTools(): void {
+    for (const s of screens) {
+      const t = s.view.toolbar;
+      if (!t) continue;
+      if (wide.matches) headTools.append(t);
+      else if (t.parentElement !== s.view.el) s.view.el.prepend(t);
+    }
+  }
+  wide.addEventListener("change", placeTools);
   const el = h(
     "div",
     { class: "app" },
-    h("header", { class: "top" }, h("div", { class: "brand" }, "VOX Velvetronix"), bar.el),
+    h("header", { class: "top" }, h("div", { class: "brand" }, "VOX", h("span", { class: "brand-more" }, "Velvetronix")), headTools, bar.el),
     // Outside the header so it alone can stick to the top.
     h("nav", { class: "tabs" }, ...tabs),
     main,
@@ -47,6 +63,7 @@ export function createShell(ctx: Ctx): { el: HTMLElement; render(): void; destro
       if (s === current) tabs[i].setAttribute("aria-current", "page");
       else tabs[i].removeAttribute("aria-current");
     });
+    headTools.hidden = !current.view.toolbar;
     current.view.show?.();
     render();
   }
@@ -57,6 +74,14 @@ export function createShell(ctx: Ctx): { el: HTMLElement; render(): void; destro
     current.view.render();
   }
 
+  placeTools();
   route();
-  return { el, render, destroy: () => window.removeEventListener("hashchange", route) };
+  return {
+    el,
+    render,
+    destroy: () => {
+      window.removeEventListener("hashchange", route);
+      wide.removeEventListener("change", placeTools);
+    },
+  };
 }

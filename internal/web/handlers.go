@@ -47,6 +47,31 @@ func (s *Server) handleIndex(w http.ResponseWriter, r *http.Request) {
 	io.Copy(w, zr)
 }
 
+// appFiles are the home-screen app files next to the page (web/public), served without login.
+var appFiles = map[string]string{
+	"manifest.webmanifest": "application/manifest+json",
+	"apple-touch-icon.png": "image/png",
+	"icon-192.png":         "image/png",
+	"icon-512.png":         "image/png",
+}
+
+func (s *Server) handleAppFile(w http.ResponseWriter, r *http.Request) {
+	name := r.PathValue("file")
+	ctype, ok := appFiles[name]
+	if !ok {
+		http.NotFound(w, r)
+		return
+	}
+	b, err := fs.ReadFile(s.Assets, name)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	w.Header().Set("Content-Type", ctype)
+	w.Header().Set("Cache-Control", "max-age=86400")
+	w.Write(b)
+}
+
 func (s *Server) handleHealthz(w http.ResponseWriter, r *http.Request) {
 	if _, err := fs.Stat(s.Assets, indexFile); err != nil {
 		http.Error(w, "frontend missing", http.StatusServiceUnavailable)

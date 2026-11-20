@@ -3,7 +3,7 @@
 
 import { build, transform } from "esbuild";
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { constants, gzipSync } from "node:zlib";
@@ -49,6 +49,10 @@ gz[9] = 3;
 
 await mkdir(dirname(outFile), { recursive: true });
 await writeFile(outFile, gz);
+// Home-screen app files (manifest, icons) are served as they are.
+for (const f of ["manifest.webmanifest", "apple-touch-icon.png", "icon-192.png", "icon-512.png"]) {
+  await copyFile(web(`public/${f}`), `${dirname(outFile)}/${f}`);
+}
 
 const sha = createHash("sha256").update(gz).digest("hex");
 console.log(`${outFile}: ${gz.length} bytes gzip (${Buffer.byteLength(html)} raw), sha256 ${sha}`);

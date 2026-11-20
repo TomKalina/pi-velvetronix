@@ -118,7 +118,7 @@ export function createTechnical(ctx: Ctx, edits: Edits): { el: HTMLElement; rend
   const cls = choice("amp11", "CLASS", [...CLASS_NAMES], (p) => p.amp[11], (v) => send(ID_AMP, 11, v));
   const amp = h(
     "section",
-    { class: "card" },
+    { class: "card amp-card" },
     h("h2", null, "Zesilovač"),
     h("p", { class: "muted small" }, "Power Level je analogový a nelze ho ovládat na dálku."),
     model.row,

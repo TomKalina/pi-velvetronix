@@ -239,6 +239,10 @@ export function createGraphic(ctx: Ctx, edits: Edits): View {
     const params = h("div", { class: "stomp-knobs" });
     const fsLabel = h("span", { class: "fs-label" });
     const footswitch = h("button", { type: "button", class: "footswitch" }, h("span", { class: "fs-cap", "aria-hidden": "true" }), fsLabel);
+    // Phone: one pedal at a time, picked by these tabs (they also show on/off and the type).
+    const tabLed = h("span", { class: "stomp-led", "aria-hidden": "true" });
+    const tabType = h("span", { class: "pedal-tab-type" });
+    const tab = h("button", { type: "button", class: "pedal-tab", role: "tab" }, tabLed, h("span", { class: "pedal-tab-name" }, title), tabType);
     const box = h(
       "section",
       { class: "stomp", "aria-label": title },
@@ -252,6 +256,7 @@ export function createGraphic(ctx: Ctx, edits: Edits): View {
     const showOn = (v: boolean) => {
       isOn = v;
       box.classList.toggle("stomp-on", v);
+      tab.classList.toggle("stomp-on", v);
       footswitch.setAttribute("aria-pressed", String(v));
       setText(fsLabel, v ? "Zapnuto" : "Vypnuto");
       footswitch.setAttribute("aria-label", `${title}: ${v ? "zapnuto" : "vypnuto"}`);
@@ -276,6 +281,9 @@ export function createGraphic(ctx: Ctx, edits: Edits): View {
       const color = ENCLOSURE[slot][t] ?? "#4a4743";
       box.style.setProperty("--enc", color);
       box.classList.toggle("ink-dark", darkInk(color));
+      setText(tabType, main.text);
+      tab.style.setProperty("--enc", color);
+      tab.classList.toggle("ink-dark", darkInk(color));
       if (typeSel.value !== String(t)) typeSel.value = String(t);
     };
     typeSel.addEventListener("change", () => {
@@ -310,6 +318,7 @@ export function createGraphic(ctx: Ctx, edits: Edits): View {
 
     return {
       box,
+      tab,
       knobs: () => paramKnobs,
       set(p: Program) {
         const type = effectType(p, slot);
@@ -328,7 +337,15 @@ export function createGraphic(ctx: Ctx, edits: Edits): View {
       },
     };
   });
-  const board = h("div", { class: "pedalboard" }, ...stomps.map((s) => s.box));
+  const pick = (i: number) =>
+    stomps.forEach((s, j) => {
+      s.box.classList.toggle("stomp-picked", i === j);
+      s.tab.setAttribute("aria-selected", String(i === j));
+    });
+  stomps.forEach((s, i) => s.tab.addEventListener("click", () => pick(i)));
+  pick(0);
+  const pedalTabs = h("div", { class: "pedal-tabs", role: "tablist", "aria-label": "Pedály" }, ...stomps.map((s) => s.tab));
+  const board = h("div", { class: "pedalboard" }, pedalTabs, ...stomps.map((s) => s.box));
 
   const el = h("div", { class: "rig" }, panel, board);
   let namesShown = "";

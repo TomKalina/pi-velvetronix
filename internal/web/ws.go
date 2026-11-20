@@ -2,8 +2,6 @@ package web
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -24,7 +22,9 @@ const (
 	wsPingTimeout  = 5 * time.Second
 	wsWriteTimeout = 5 * time.Second
 	closeBusy      = websocket.StatusCode(4001)
-	closeReplaced  = websocket.StatusCode(4002)
+	closeTaken     = websocket.StatusCode(4003)
+	closeFree      = websocket.StatusCode(4004)
+	kindEcho       = 0x02
 )
 
 type helloMsg struct {
@@ -64,15 +64,15 @@ func (s *Server) handleWS(w http.ResponseWriter, r *http.Request) {
 	}
 	defer c.CloseNow()
 	c.SetReadLimit(wsReadLimit)
-
-	// Same session (another tab, or a reconnect before the old socket timed out) takes over.
-	owner := sha256.Sum256([]byte(sessionToken(r)))
-	s.ctrlMu.Lock()
-	ctrl, ok := s.Amp.Attach(hex.EncodeToString(owner[:]))
-	if ok {
-		s.ctrlActive.Store(true)
+	if r.URL.Query().Get("watch") == "1" {
+		s.watchWS(c, r)
+		return
 	}
-	s.ctrlMu.Unlock()
+
+	// Several clients control the amp at once and see each other's changes (echoes). Only when
+	// all slots are taken: busy, or with ?takeover=1 the oldest controller is dropped.
+	takeover := r.URL.Query().Get("takeover") == "1"
+	ctrl, ok := s.Amp.Attach(takeover)
 	if !ok {
 		ctx, cancel := context.WithTimeout(s.ctx, wsWriteTimeout)
 		defer cancel()
@@ -80,17 +80,8 @@ func (s *Server) handleWS(w http.ResponseWriter, r *http.Request) {
 		_ = c.Close(closeBusy, "busy")
 		return
 	}
-	defer func() {
-		s.ctrlMu.Lock()
-		defer s.ctrlMu.Unlock()
-		select {
-		case <-ctrl.Replaced(): // the slot belongs to the new controller
-		default:
-			s.ctrlActive.Store(false)
-		}
-		ctrl.Detach()
-	}()
-	s.Log.Info("controller connected", "ip", remoteIP(r))
+	defer ctrl.Detach()
+	s.Log.Info("controller connected", "ip", remoteIP(r), "takeover", takeover)
 	defer s.Log.Info("controller disconnected", "ip", remoteIP(r))
 
 	ctx, cancel := context.WithCancel(s.ctx)
@@ -132,14 +123,15 @@ func (s *Server) handleWS(w http.ResponseWriter, r *http.Request) {
 		case <-ctx.Done():
 			return
 		case <-ctrl.Replaced():
-			s.Log.Info("controller replaced by the same session", "ip", remoteIP(r))
-			_ = send(typeMsg{T: "replaced"})
-			_ = c.Close(closeReplaced, "replaced")
+			s.Log.Info("controller dropped by a takeover", "ip", remoteIP(r))
+			_ = send(typeMsg{T: "taken"})
+			_ = c.Close(closeTaken, "taken")
 			return
 		case f := <-ctrl.Frames():
-			wctx, wcancel := context.WithTimeout(ctx, wsWriteTimeout)
-			err = c.Write(wctx, websocket.MessageBinary, append([]byte{0x00}, f...))
-			wcancel()
+			err = writeFrame(ctx, c, f)
+		case <-ctrl.Lost():
+			// Frames were dropped (client too slow): the page re-reads the amp.
+			err = send(typeMsg{T: "resync"})
 		case st := <-ampCh:
 			err = send(ampMsg{T: "amp", Amp: st})
 		case u := <-updCh:
@@ -153,6 +145,87 @@ func (s *Server) handleWS(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+}
+
+// watchWS serves a read-only watcher (all controller slots were taken): amp frames (kind 0x00)
+// and the controllers' frames (kind 0x02) until a slot is free; then {"t":"free"} and close 4004.
+func (s *Server) watchWS(c *websocket.Conn, r *http.Request) {
+	obs := s.Amp.Observe()
+	defer obs.Close()
+	s.Log.Info("watcher connected", "ip", remoteIP(r))
+	defer s.Log.Info("watcher disconnected", "ip", remoteIP(r))
+
+	ctx, cancel := context.WithCancel(s.ctx)
+	defer cancel()
+	send := func(v any) error {
+		wctx, wcancel := context.WithTimeout(ctx, wsWriteTimeout)
+		defer wcancel()
+		return wsjson.Write(wctx, c, v)
+	}
+	ampCh, unsubAmp := s.Amp.Subscribe()
+	defer unsubAmp()
+	updCh, unsubUpd := s.subscribeUpdates()
+	defer unsubUpd()
+
+	if send(helloMsg{T: "hello", Version: s.Version}) != nil ||
+		send(typeMsg{T: "watching"}) != nil ||
+		send(ampMsg{T: "amp", Amp: s.Amp.Status()}) != nil {
+		return
+	}
+	go func() {
+		defer cancel()
+		for {
+			typ, data, err := c.Read(ctx)
+			if err != nil {
+				return
+			}
+			// A watcher cannot send to the amp; only the application ping is answered.
+			var m typeMsg
+			if typ == websocket.MessageText && json.Unmarshal(data, &m) == nil && m.T == "ping" && send(typeMsg{T: "pong"}) != nil {
+				return
+			}
+		}
+	}()
+
+	ping := time.NewTicker(wsPingInterval)
+	defer ping.Stop()
+	for {
+		var err error
+		select {
+		case <-ctx.Done():
+			return
+		case <-obs.Freed():
+			_ = send(typeMsg{T: "free"})
+			_ = c.Close(closeFree, "free")
+			return
+		case f := <-obs.Frames():
+			err = writeFrame(ctx, c, f)
+		case <-obs.Lost():
+			err = send(typeMsg{T: "resync"})
+		case st := <-ampCh:
+			err = send(ampMsg{T: "amp", Amp: st})
+		case u := <-updCh:
+			err = send(updateMsg{T: "update", Update: u})
+		case <-ping.C:
+			pctx, pcancel := context.WithTimeout(ctx, wsPingTimeout)
+			err = c.Ping(pctx)
+			pcancel()
+		}
+		if err != nil {
+			return
+		}
+	}
+}
+
+// writeFrame sends an amp frame (kind 0x00) or another controller's frame (kind 0x02).
+func writeFrame(ctx context.Context, c *websocket.Conn, f bridge.ObservedFrame) error {
+	kind := byte(0x00)
+	if f.Echo {
+		kind = kindEcho
+	}
+	wctx, wcancel := context.WithTimeout(ctx, wsWriteTimeout)
+	defer wcancel()
+	return c.Write(wctx, websocket.MessageBinary, append([]byte{kind}, f.Data...))
 }
 
 func (s *Server) handleClientMessage(ctrl Controller, typ websocket.MessageType, data []byte, send func(any) error) error {

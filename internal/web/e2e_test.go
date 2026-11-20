@@ -12,6 +12,7 @@ import (
 	"github.com/coder/websocket"
 
 	"github.com/TomKalina/pi-velvetronix/internal/auth"
+	"github.com/TomKalina/pi-velvetronix/internal/bridge"
 )
 
 type wsMsg struct {
@@ -28,6 +29,11 @@ type wsClient struct {
 
 func dialWS(t *testing.T, h *harness, cookie string, header http.Header) (*wsClient, *http.Response, error) {
 	t.Helper()
+	return dialWSQuery(t, h, cookie, header, "")
+}
+
+func dialWSQuery(t *testing.T, h *harness, cookie string, header http.Header, query string) (*wsClient, *http.Response, error) {
+	t.Helper()
 	if header == nil {
 		header = http.Header{}
 	}
@@ -36,7 +42,7 @@ func dialWS(t *testing.T, h *harness, cookie string, header http.Header) (*wsCli
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	c, resp, err := websocket.Dial(ctx, "ws"+strings.TrimPrefix(h.ts.URL, "http")+"/ws", &websocket.DialOptions{HTTPHeader: header})
+	c, resp, err := websocket.Dial(ctx, "ws"+strings.TrimPrefix(h.ts.URL, "http")+"/ws"+query, &websocket.DialOptions{HTTPHeader: header})
 	if err != nil {
 		return nil, resp, err
 	}
@@ -235,28 +241,13 @@ func TestEndToEnd(t *testing.T) {
 	port.in <- append(append([]byte{0xF8, 0xF0, 0x42}, ack[2:5]...), append([]byte{0xFE}, ack[5:]...)...)
 	ws.binary(t, append([]byte{0x00}, ack...))
 
-	// The same session (another tab, or a reconnect before the old socket timed out) takes over.
+	// Another tab of the same session and another session control the amp at the same time.
+	gain := korg(0x41, 0x04, 0x00, 0x2D, 0x00)
 	ws2, _, err := dialWS(t, h, token, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 	ws2.text(t, "hello")
-	ws.text(t, "replaced")
-	m := ws.next(t, "close", func(m wsMsg) bool { return m.err != nil })
-	if websocket.CloseStatus(m.err) != 4002 {
-		t.Errorf("replaced client close = %v", m.err)
-	}
-	waitUntil(t, func() bool { return strings.Contains(h.logs.String(), "controller disconnected") })
-	time.Sleep(50 * time.Millisecond) // let the old handler's deferred cleanup finish
-	if _, m := h.do(t, c, "GET", "/api/status", ""); m["controller"].(map[string]any)["active"] != true {
-		t.Errorf("controller not active after takeover: %v", m["controller"])
-	}
-	ws = ws2
-	ws.ampState(t, "connected")
-	port.in <- ack
-	ws.binary(t, append([]byte{0x00}, ack...)) // amp frames now go to the new controller
-
-	// A different session is turned away.
 	c2 := jarClient()
 	resp, _ = h.do(t, c2, "POST", "/api/login", `{"password":"heslo-k-voxu"}`)
 	if resp.StatusCode != 200 {
@@ -272,11 +263,76 @@ func TestEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	other.text(t, "busy")
-	m = other.next(t, "close", func(m wsMsg) bool { return m.err != nil })
-	if websocket.CloseStatus(m.err) != 4001 {
-		t.Errorf("other session close = %v", m.err)
+	other.text(t, "hello")
+	if _, m := h.do(t, c, "GET", "/api/status", ""); m["controller"].(map[string]any)["count"] != float64(3) {
+		t.Errorf("controller status = %v", m["controller"])
 	}
+
+	// A change: the reply goes to the sender, and once the amp ACKs it the others see it (kind 0x02).
+	ws.send(t, 0, gain)
+	if got := <-port.out; !bytes.Equal(got, gain) {
+		t.Fatalf("written % X", got)
+	}
+	port.in <- ack
+	ws.binary(t, append([]byte{0x00}, ack...))
+	ws2.binary(t, append([]byte{0x02}, gain...))
+	other.binary(t, append([]byte{0x02}, gain...))
+	// A knob turned on the amp reaches everyone.
+	port.in <- gain
+	for _, w := range []*wsClient{ws, ws2, other} {
+		w.binary(t, append([]byte{0x00}, gain...))
+	}
+
+	// All slots taken: the next client is busy and can watch; ?takeover=1 drops the oldest.
+	var extra []*wsClient
+	for i := 3; i < bridge.MaxControllers; i++ {
+		e, _, err := dialWS(t, h, token2, nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		e.text(t, "hello")
+		extra = append(extra, e)
+	}
+	full, _, err := dialWS(t, h, token2, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	full.text(t, "busy")
+	m := full.next(t, "close", func(m wsMsg) bool { return m.err != nil })
+	if websocket.CloseStatus(m.err) != 4001 {
+		t.Errorf("busy close = %v", m.err)
+	}
+	watcher, _, err := dialWSQuery(t, h, token2, nil, "?watch=1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	watcher.text(t, "hello")
+	watcher.text(t, "watching")
+	watcher.ampState(t, "connected")
+	ws2.send(t, 0, gain)
+	<-port.out
+	port.in <- ack
+	watcher.binary(t, append([]byte{0x00}, ack...))
+	watcher.binary(t, append([]byte{0x02}, gain...))
+	ws2.binary(t, append([]byte{0x00}, ack...))
+	watcher.send(t, 0, modeReq) // ignored: a watcher cannot write
+	select {
+	case f := <-port.out:
+		t.Fatalf("watcher frame reached the amp: % X", f)
+	case <-time.After(100 * time.Millisecond):
+	}
+	taker, _, err := dialWSQuery(t, h, token2, nil, "?takeover=1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	taker.text(t, "hello")
+	ws.text(t, "taken")
+	m = ws.next(t, "close", func(m wsMsg) bool { return m.err != nil })
+	if websocket.CloseStatus(m.err) != 4003 {
+		t.Errorf("taken close = %v", m.err)
+	}
+	ws = taker
+	ws.ampState(t, "connected")
 
 	// Update staged: clients are told, writes are refused.
 	if resp, _ := h.do(t, c, "POST", "/api/update", "package"); resp.StatusCode != 202 {
@@ -297,8 +353,16 @@ func TestEndToEnd(t *testing.T) {
 	port.Close()
 	ws.ampState(t, "disconnected")
 
-	// Closing the controller frees the slot.
+	// Closing a controller frees a slot; the watcher is told so it can take control.
 	ws.c.Close(websocket.StatusNormalClosure, "")
+	watcher.text(t, "free")
+	m = watcher.next(t, "close", func(m wsMsg) bool { return m.err != nil })
+	if websocket.CloseStatus(m.err) != 4004 {
+		t.Errorf("watcher close = %v", m.err)
+	}
+	for _, w := range append([]*wsClient{ws2, other}, extra...) {
+		w.c.Close(websocket.StatusNormalClosure, "")
+	}
 	waitUntil(t, func() bool {
 		_, m := h.do(t, c, "GET", "/api/status", "")
 		return m["controller"].(map[string]any)["active"] == false

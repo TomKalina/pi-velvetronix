@@ -1,34 +1,89 @@
 # pi-velvetronix
 
-Webový ovladač komba **VOX Valvetronix VT100X** (řada VT-X) přes Wi-Fi. Raspberry Pi Zero 2 W
-je krátkým USB kabelem připojené ke kombu jako USB host, poskytuje český web pro telefon
-i počítač a předává příkazy kombu přes USB-MIDI (SysEx). Funguje lokálně bez internetu.
+Dálkové ovládání komba **VOX Valvetronix VT100X** (řada VT-X) z tabletu, telefonu nebo počítače
+přes Wi-Fi. Malé Raspberry Pi Zero 2 W je USB kabelem připojené ke kombu, vytváří českou webovou
+aplikaci a posílá kombu příkazy přes USB-MIDI. Funguje v lokální síti bez internetu a bez
+aplikace VOX Tone Room.
+
+![Ovládání na iPadu na šířku: panel komba s knoby a tři pedály](docs/img/ipad-graficky.png)
+
+## Co umí
+
+- **Panel komba na obrazovce.** Model zesilovače, otočné knoby (GAIN, TREBLE, MIDDLE, BASS,
+  VOLUME, PRESENCE, RESONANCE, NOISE REDUCTION), přepínače BRIGHT CAP, LOW CUT, MID BOOST, BIAS
+  a CLASS, banky a kanály A1–B4. Pedály vypadají jako krabičky s nožním spínačem v barvě
+  napodobovaného pedálu.
+- **Dva režimy.** **Grafický** (panel jako na kombu) a **Technický** (posuvníky a seznamy).
+  Přepínač názvů **originál / z komba**, např. „Marshall JCM800“ místo „BRIT 800“. Předlohy
+  pedálů a některých zesilovačů VOX oficiálně neuvádí: nejisté názvy jsou označené „~“
+  a podtržené, zdroje jsou ve `web/research/`.
+- **Písničky.** 41 přibližných zvuků slavných písniček, hlavně punk (punk, pop-punk, skate-punk,
+  hardcore, ska-punk, český punk) a rockové klasiky, např. Seven Nation Army. **Zahrát** nastaví
+  zvuk v kombu jen živě, nemění hlasitost programu a nic neukládá.
+- **Ukládání do kanálů.** Zvuk jde uložit pod vlastním jménem (max. 16 znaků) do A1–B4. Kombo
+  zápis potvrdí a aplikace ho ověří zpětným přečtením.
+- **Víc ovladačů najednou, všechno živě.** Kombo může současně ovládat až 8 oken: tablet,
+  telefon, další záložka nebo MCP server pro Clauda (`mcp/`). Každé okno hned vidí, co změnila
+  ostatní, i co se otočí přímo na kombu.
+- **Aplikace na ploše iPadu.** V Safari Sdílet → Přidat na plochu: vlastní ikona, celá obrazovka
+  bez lišt Safari (viz [Instalace na plochu](#instalace-na-plochu-ipadu-nebo-telefonu)).
+- **Rozložení pro tablet a telefon.** Na iPadu 11" se celý panel s pedály vejde na jednu obrazovku
+  na šířku i na výšku. Na telefonu je krátká hlavička (název, tečky stavu, záložky) a pedály se
+  přepínají záložkami Pedál 1 / Pedál 2 / Reverb, které ukazují i zapnutí a typ efektu.
+- **Bez zásahu do paměti komba, dokud to nechceš.** Pi nepustí zápis do paměti komba (`4C`, `11`),
+  pokud zpráva není označená jako výslovné uložení. Start, připojení ani aktualizace nic
+  nepřepisují.
+- Wi-Fi nastavení, záložní hotspot `VOX-Velvetronix`, aktualizace firmwaru přes web s návratem
+  na předchozí verzi, když nová nenaběhne.
+
+Power Level je na kombu analogový a dálkově ovládat nejde.
+
+| Technický režim | Písničky |
+|---|---|
+| ![Technický režim: programy, posuvníky zesilovače a efektů](docs/img/ipad-technicky.png) | ![Seznam písniček s tlačítkem Zahrát](docs/img/pisnicky.png) |
+
+| iPad na výšku | Telefon |
+|---|---|
+| ![Grafický režim na iPadu na výšku](docs/img/ipad-na-vysku.png) | ![Grafický režim na telefonu](docs/img/telefon.png) |
+
+Obrázky jsou z náhledu se simulovaným kombem (`cd web && npm run preview`).
+
+## Jak to funguje
 
 ```
-telefon / notebook ──Wi-Fi── Pi Zero 2 W ──USB (OTG)── VOX VT100X
-  web + protokol VOX           Go daemon:                 zvuk, programy
-  (TypeScript)                 WebSocket ↔ ALSA rawmidi
-                               přihlášení, Wi-Fi, mDNS,
-                               aktualizace s rollbackem
+tablet / telefon / Claude ──Wi-Fi── Pi Zero 2 W ──USB (OTG)── VOX VT100X
+  web + protokol VOX             Go daemon:                  zvuk, programy
+  (TypeScript), MCP server       WebSocket ↔ ALSA rawmidi
+                                 fronta povelů, rozesílání,
+                                 přihlášení, Wi-Fi, mDNS,
+                                 aktualizace s rollbackem
 ```
 
-- Protokol VOXu běží v prohlížeči (`web/src/protocol/`). Pi jen předává celé SysEx zprávy,
-  kontroluje je a **nepustí zápis do paměti komba** (`4C`, `11`), pokud zpráva není označená
-  jako výslovné uložení uživatelem. Start, připojení webu ani aktualizace nic nepřepisují.
-- Dva režimy zobrazení: **Grafický** (panel komba s otočnými knoby, pedály jako krabičky
-  s footswitchem) a **Technický** (posuvníky). Přepínač názvů **originál / z komba**
-  (např. „Marshall JCM800“ vs „BRIT 800“). Předlohy pedálů a některých zesilovačů VOX oficiálně
-  neuvádí; nejisté názvy jsou označené „~“ a podtržené, zdroje v `web/research/`.
-- Záložka **Písničky**: 40 přibližných zvuků, hlavně punk (punk, pop-punk, skate-punk,
-  hardcore, ska-punk, český punk) a pár rockových klasik. **Zahrát** nastaví zvuk v kombu
-  jen živě, nemění hlasitost programu a nic neukládá. Uložit jde pak tlačítkem Uložit.
-- Ovládat může vždy jen jeden prohlížeč. Další dostane hlášku „Ovládání je otevřené v jiném
-  prohlížeči“.
-- Power Level je na kombu analogový a dálkově ovládat nejde.
+- Protokol VOXu běží v prohlížeči (`web/src/protocol/`), stejný kód používá MCP server. Pi předává
+  celé SysEx zprávy a kontroluje je.
+- Každé okno je s Pi spojené přes WebSocket `/ws`. Daemon povely od všech oken posílá kombu po
+  jednom a odpověď vrátí odesílateli. Kombo totiž odpovídá jen „OK“ a neříká komu. Změnu, kterou
+  kombo potvrdí, daemon rozešle ostatním oknům. Změny z knobů na kombu dostanou všechna okna.
 - Podklady: protokol [docs/protocol.md](docs/protocol.md) (z oficiální „Valvetronix X MIDI
   Implementation v1.0“ a projektu [vox-amp-librarian](https://github.com/tmarsteel/vox-amp-librarian),
   MIT licence, Copyright (c) 2023 Tobias Marstaller), návrh a rozhraní [docs/design.md](docs/design.md),
   záznam testů [docs/testing.md](docs/testing.md).
+
+## Instalace na plochu iPadu nebo telefonu
+
+1. Otevři v Safari `http://velvetronix.local` a přihlas se.
+2. Klepni na **Sdílet** → **Přidat na plochu** → **Přidat**.
+3. Na ploše se objeví ikona **VOX**. Otevře aplikaci přes celou obrazovku.
+
+Aplikace na ploše má vlastní přihlášení, odděleně od Safari, takže se v ní přihlas jednou znovu.
+Přihlášení vydrží 30 dní. Bez spojení s Pi aplikace nefunguje: web běží přes HTTP v lokální síti,
+a v takovém prostředí prohlížeče nedovolí offline režim (service worker).
+
+## MCP server pro Clauda
+
+`mcp/` obsahuje MCP server, přes který může Claude kombo číst a nastavovat: stav, živé nastavení
+zvuku, písničky, přepnutí a uložení programu. Otevřené stránky vidí jeho změny živě. Sestavení
+a registrace jsou v [mcp/README.md](mcp/README.md).
 
 ## Hardware a zapojení
 
@@ -175,9 +230,9 @@ s nainstalovanými root skripty, jinak ji nasaď přes `scripts/install.sh`.
 Logy: `ssh velvetronix@velvetronix.local sudo journalctl -u pi-velvetronix -u pi-velvetronix-updater -b`.
 Hesla, PSK ani session tokeny se nikdy nelogují.
 
-## Test s kombem (zatím neprovedený)
+## Test s kombem
 
-Kombo zatím nebylo připojené. Postup ověření:
+Kombo VT100X je ověřené (viz [docs/testing.md](docs/testing.md)). Postup, kdyby ho Pi nenašlo:
 
 1. Zapoj Pi podle schématu výše, zapni kombo.
 2. Web: hlavička má ukázat **Kombo (USB) připojeno** (až po odpovědi komba na Device Inquiry).
@@ -199,9 +254,9 @@ Kombo zatím nebylo připojené. Postup ověření:
 
 ## Omezení
 
-- Ověřeno jen se simulátorem komba (`cmd/fakeamp`) přes virtuální MIDI na Pi, ne se skutečným
-  VT100X (USB ID, název ALSA karty, chování při ukládání, odpojení kabelu). Viz
-  [docs/testing.md](docs/testing.md).
+- Se skutečným VT100X je ověřené připojení, ovládání, ukládání do slotu se zpětným přečtením
+  a sdílené ovládání z více oken. Přežití uložených programů po vypnutí komba a změny z knobů
+  přímo na kombu zatím ověřené nejsou. Viz [docs/testing.md](docs/testing.md).
 - Import/export VTXPROG zatím není (zadání: až po spolehlivém základu).
 - Web běží přes HTTP v lokální síti; heslo putuje v síti nešifrovaně.
 - Polkit pravidlo povoluje NetworkManager akce uživateli `pi-velvetronix` (kontrola podle

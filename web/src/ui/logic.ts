@@ -4,7 +4,7 @@ import type { AmpConnState, UpdateInfo } from "../api";
 import type { EffectSlot } from "../protocol/program";
 import { EFFECT_PARAMS, type EffectParam } from "../protocol/tables";
 import type { ConnState } from "../ws";
-import { BUSY_TEXT, REPLACED_TEXT } from "./format";
+import { REPLACED_TEXT, WATCHING_TEXT } from "./format";
 
 export interface GateInput {
   ws: ConnState["kind"];
@@ -25,8 +25,8 @@ const off = (reason: string, canRetryRead = false, canRetryWs = false): Gate => 
 export function controlGate(g: GateInput): Gate {
   if (g.updating) return off("Probíhá aktualizace, ovládání je pozastavené.");
   switch (g.ws) {
-    case "busy": return off(`${BUSY_TEXT}. Zavřete ho tam a pak klikněte na Zkusit znovu.`, false, true);
     case "replaced": return off(`${REPLACED_TEXT}.`, false, true);
+    case "watching": return off(`${WATCHING_TEXT}. Změny vidíš živě. Až se některé zavře, ovládání se vrátí sem.`);
     case "idle":
     case "connecting": return off("Připojuji se k ovladači…");
     case "waiting": return off("Spojení s ovladačem je přerušené.", false, true);

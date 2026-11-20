@@ -32,7 +32,9 @@ export function runApp(root: HTMLElement, api: Api, ws: WsTransport): void {
 
   function changed(): void {
     // readAll() only once the bridge and the amp are both up; nothing is ever written here.
-    sync.update(data.ws.kind === "open" && data.amp?.state === "connected" && !isUpdating(data.update));
+    const watching = data.ws.kind === "watching";
+    client.setObserving(watching);
+    sync.update(data.ws.kind === "open" && data.amp?.state === "connected" && !isUpdating(data.update), watching);
     if (renderQueued || !shell) return;
     renderQueued = true;
     requestAnimationFrame(() => {
@@ -46,12 +48,19 @@ export function runApp(root: HTMLElement, api: Api, ws: WsTransport): void {
     changed();
   });
   ws.onText((m) => {
+    if (m.t === "resync") {
+      // Missed changes: read everything again; a watcher cannot read, so it shows nothing until it can.
+      if (data.ws.kind === "watching") client.reset();
+      else sync.resync();
+      return;
+    }
     if (m.t === "amp") data.amp = m.amp;
     else if (m.t === "update") data.update = m.update;
     else return;
     changed();
   });
   ws.onError((e) => toast(ampErrorText(e.code)));
+  ws.onEcho((f) => client.peerFrame(f));
   client.onState((s) => {
     data.vox = s;
     changed();

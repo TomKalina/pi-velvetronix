@@ -12,7 +12,6 @@ import (
 	"net/http"
 	"os"
 	"sync"
-	"sync/atomic"
 	"time"
 
 	"github.com/TomKalina/pi-velvetronix/internal/bridge"
@@ -43,14 +42,25 @@ type Auth interface {
 // Controller is the controlling client's handle on the amp (*bridge.Controller).
 type Controller interface {
 	Send(kind byte, frame []byte) error
-	Frames() <-chan []byte
+	Frames() <-chan bridge.ObservedFrame
 	Replaced() <-chan struct{}
+	Lost() <-chan struct{}
 	Detach()
+}
+
+// Observer is a read-only watcher of the controller's traffic (*bridge.Observer).
+type Observer interface {
+	Frames() <-chan bridge.ObservedFrame
+	Freed() <-chan struct{}
+	Lost() <-chan struct{}
+	Close()
 }
 
 // Amp is the bridge; use FromBridge to adapt *bridge.Bridge.
 type Amp interface {
-	Attach(owner string) (Controller, bool)
+	Attach(takeover bool) (Controller, bool)
+	Controllers() int
+	Observe() Observer
 	Status() bridge.AmpStatus
 	Subscribe() (<-chan bridge.AmpStatus, func())
 	SetPaused(bool)
@@ -107,8 +117,6 @@ type Server struct {
 	started time.Time
 	handler http.Handler
 
-	ctrlMu     sync.Mutex // orders Attach/Detach with ctrlActive updates
-	ctrlActive atomic.Bool
 	uploadMu   sync.Mutex // one update upload at a time
 
 	mu         sync.Mutex
@@ -132,6 +140,7 @@ func (s *Server) routes() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /{$}", s.handleIndex)
 	mux.HandleFunc("GET /healthz", s.handleHealthz)
+	mux.HandleFunc("GET /{file}", s.handleAppFile)
 	mux.HandleFunc("GET /api/session", s.handleSession)
 	mux.HandleFunc("POST /api/login", s.handleLogin)
 	mux.HandleFunc("POST /api/logout", s.authed(s.handleLogout))
@@ -218,6 +227,7 @@ type Status struct {
 	Amp        bridge.AmpStatus  `json:"amp"`
 	Controller struct {
 		Active bool `json:"active"`
+		Count  int  `json:"count"`
 	} `json:"controller"`
 	Update update.UpdateInfo `json:"update"`
 	Auth   struct {
@@ -237,7 +247,8 @@ func (s *Server) status() Status {
 		Amp:       s.Amp.Status(),
 		Update:    s.Updater.Info(),
 	}
-	st.Controller.Active = s.ctrlActive.Load()
+	st.Controller.Count = s.Amp.Controllers()
+	st.Controller.Active = st.Controller.Count > 0
 	st.Auth.Configured = s.Auth.Configured()
 	return st
 }

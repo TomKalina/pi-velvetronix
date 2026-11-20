@@ -94,6 +94,7 @@ input[type="checkbox"] { width: 1.25rem; height: 1.25rem; accent-color: var(--ac
   padding-top: max(0.5rem, env(safe-area-inset-top));
 }
 .brand { font-weight: 700; letter-spacing: 0.04em; color: var(--accent); margin-bottom: 0.35rem; }
+.brand-more { margin-left: 0.3em; }
 main { max-width: 1120px; margin: 0 auto; padding: 1rem; }
 .screen { display: grid; gap: 1rem; max-width: 960px; margin: 0 auto; min-width: 0; }
 .screen-control { max-width: none; }
@@ -572,6 +573,160 @@ details summary { cursor: pointer; color: var(--accent); margin-top: 0.5rem; }
 
 @media (max-width: 400px) {
   .knob-label { font-size: 0.625rem; letter-spacing: 0.04em; }
+}
+
+/* --- tablet and up: one header line with brand, tabs and status dots --- */
+@media (min-width: 700px) {
+  .app { display: flex; flex-wrap: wrap; align-items: stretch; }
+  .top { display: contents; }
+  .brand, .tabs, .head-tools, .top .statusbar { display: flex; align-items: center; border-bottom: 1px solid var(--border); }
+  .brand { order: 0; }
+  .tabs { order: 1; }
+  .head-tools { order: 2; padding: 0 0.5rem; padding-top: env(safe-area-inset-top); }
+  .head-tools[hidden] { display: none !important; }
+  .head-tools .toolbar { flex-wrap: nowrap; gap: 0.5rem; }
+  .head-tools .seg-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .head-tools .seg-btn { min-height: 2rem; padding: 0.1rem 0.6rem; font-size: 0.875rem; }
+  .head-tools .seg-opts { padding: 2px; }
+  .brand { margin: 0; padding: 0 1rem; padding-top: env(safe-area-inset-top); }
+  .tabs { position: static; flex: 0 1 auto; align-items: flex-end; padding: 0; padding-top: env(safe-area-inset-top); }
+  .tab { padding: 0.55rem 0.7rem 0.45rem; }
+  /* Takes the rest of the line (or a whole line if it wraps); the dots sit at the right. */
+  .top .statusbar { order: 3; flex: 1 0 auto; flex-direction: column; justify-content: center; align-items: flex-end; padding: 0 1rem; padding-top: env(safe-area-inset-top); }
+  .top .chips { flex-wrap: nowrap; }
+  .top .chip { flex: none; }
+  .top .chip-value, .top .chip-addr, .top .chip-more { display: none; }
+  /* Only the coloured dots; the names stay for screen readers and in the tooltip. */
+  .top .chip-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .top .chips { gap: 0.15rem; }
+  .top .chip { padding: 0.35rem; background: transparent; }
+  .top .dot { width: 0.6rem; height: 0.6rem; }
+  .stale { margin: 0; }
+  main { flex: 0 0 100%; order: 4; }
+}
+@media (min-width: 700px) and (max-width: 1000px) {
+  .tab-more, .brand-more { display: none; }
+  .brand { padding: 0 0.5rem; }
+  .tab { padding-inline: 0.35rem; }
+  .head-tools { padding: 0 0.2rem; }
+  .head-tools .toolbar { gap: 0.35rem; }
+  .head-tools .seg-btn { padding-inline: 0.4rem; }
+  .top .statusbar { padding: 0 0.25rem; }
+  .top .chip { padding: 0.25rem; }
+}
+
+/* --- tablet (iPad 11": 834x1194 portrait, 1194x834 landscape): amp and pedals fit on one screen --- */
+@media (min-width: 700px) and (max-width: 1400px) {
+  main { padding: 0.6rem 0.9rem; }
+  .screen { gap: 0.6rem; }
+  .seg-btn { min-height: 2.25rem; padding-block: 0.15rem; }
+  .seg-opts { padding: 2px; }
+  .amp-panel { padding: 0.75rem 0.9rem 0.8rem; }
+  .logo-vox { font-size: 1.6rem; }
+  .bank, .ch { min-height: 3rem; padding: 0.25rem 0.3rem; }
+  .panel-body { margin-top: 0.65rem; padding: 0.6rem 0.8rem; gap: 0.6rem 1rem; }
+  .knob { --k: 3.3rem; }
+  .knob-lg { --k: 4.6rem; }
+  .knob-sm { --k: 2.8rem; }
+  .valve { margin-top: 0.6rem; }
+  .pedalboard { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+  .stomp { gap: 0.45rem; padding: 0.6rem 0.7rem 0.7rem; }
+  .stomp-type { min-height: 2.75rem; }
+  .stomp-knobs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.2rem; min-height: 0; }
+  .stomp .selector-sw { grid-column: 1 / -1; flex-direction: row; justify-self: start; }
+  /* The footswitch sits beside the slot name instead of under the knobs. */
+  .stomp-top { min-height: 2.75rem; padding-right: 7.5rem; }
+  .footswitch { position: absolute; top: 0.6rem; right: 0.7rem; grid-auto-flow: column; align-items: center; gap: 0.45rem; min-height: 2.75rem; padding: 0 0.2rem; }
+  .fs-cap { width: 2.4rem; height: 2.4rem; box-shadow: 0 0 0 3px rgb(0 0 0 / 0.35), 0 3px 0 rgb(0 0 0 / 0.45), inset 0 -2px 4px rgb(0 0 0 / 0.35); }
+  /* Save in one line: title, slot, name, button; the note below. */
+  .save { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; padding: 0.6rem 1rem; }
+  .save h2 { margin: 0; font-size: 1.05rem; }
+  .save .row { display: flex; align-items: center; gap: 0.5rem; margin: 0; }
+  .save .row select { width: 5.5rem; }
+  .save .row input { width: 12rem; }
+  .save > p.muted { order: 10; flex-basis: 100%; margin: 0; }
+
+  /* Technical view: programs in one row, amp sliders in two columns, the three effects side by side. */
+  .technical { gap: 0.6rem; }
+  .technical .card { padding: 0.7rem 1rem; }
+  .technical .row { margin: 0.25rem 0; }
+  .technical .row > label { font-size: 0.875rem; }
+  .progs { grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 0.4rem; }
+  .prog { min-height: 3rem; padding: 0.3rem 0.5rem; }
+  .amp-card { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; align-content: start; }
+  .amp-card > h2, .amp-card > p, .amp-card > .switches { grid-column: 1 / -1; }
+  .amp-card .row.slider { grid-template-columns: 7.5rem 1fr 3rem; }
+  .amp-card .row:not(.slider) { grid-template-columns: 7.5rem 1fr; }
+  .effects { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+  .effect .row, .effect .row.slider { grid-template-columns: 5.25rem 1fr 3.6rem; gap: 0.25rem 0.5rem; }
+  .effect .row:not(.slider) { grid-template-columns: 5.25rem 1fr; }
+  .effect .row > label { font-size: 0.8125rem; }
+  .technical .row output { white-space: nowrap; }
+}
+/* Portrait tablet: the amp knobs stay in one row of eight. */
+@media (min-width: 700px) and (max-width: 900px) {
+  .knobrow { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+}
+
+/* Pedal tabs exist for phones only. */
+.pedal-tabs { display: none; }
+
+/* --- phone (under 700 px): short header, one pedal at a time, compact panel --- */
+@media (max-width: 699px) {
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.4rem 0.75rem 0.25rem; padding-top: max(0.4rem, env(safe-area-inset-top)); }
+  .brand { margin: 0; }
+  .top .statusbar { display: flex; flex-direction: column; align-items: flex-end; min-width: 0; }
+  .top .chips { flex-wrap: nowrap; gap: 0.15rem; }
+  .top .chip-value, .top .chip-addr, .top .chip-more { display: none; }
+  .top .chip-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .top .chip { padding: 0.35rem; background: transparent; }
+  .top .dot { width: 0.65rem; height: 0.65rem; }
+  .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: 0 0.25rem; }
+  .tab { padding: 0.45rem 0.4rem; }
+  .tab-more { display: none; }
+  main { padding: 0.6rem 0.6rem 1rem; }
+  .screen { gap: 0.6rem; }
+
+  .screen-control .toolbar .seg-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .toolbar .seg-btn { min-height: 2.5rem; }
+
+  .amp-panel { padding: 0.75rem 0.6rem 0.8rem; }
+  .panel-body { margin-top: 0.6rem; padding: 0.6rem 0.4rem; gap: 0.6rem; }
+  .knob { --k: 3.3rem; }
+  .knob-lg { --k: 4.5rem; }
+  .knob-sm { --k: 2.9rem; }
+  /* The three latches in one row, BIAS and CLASS in the next. */
+  .valve { margin-top: 0.6rem; gap: 0.5rem 0.75rem; }
+  .valve .latches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.35rem; }
+  .valve .latch { justify-content: center; padding: 0.3rem 0.35rem; font-size: 0.6875rem; letter-spacing: 0.03em; white-space: nowrap; }
+
+  .pedal-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.35rem; }
+  .pedal-tab {
+    --enc: #4a4743; --print: #f4ede0;
+    display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 0.4rem;
+    min-height: 3rem; padding: 0.35rem 0.5rem; text-align: left;
+    border: 2px solid transparent; border-radius: 10px;
+    background: var(--enc); color: var(--print); font-family: var(--p-font);
+  }
+  .pedal-tab.ink-dark { --print: #1d1a16; }
+  .pedal-tab[aria-selected="true"] { border-color: var(--text); }
+  .pedal-tab .stomp-led { grid-row: span 2; }
+  .pedal-tab-name { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; }
+  .pedal-tab-type { font-family: system-ui, sans-serif; font-size: 0.6875rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pedalboard { gap: 0.5rem; }
+  .pedalboard .stomp:not(.stomp-picked) { display: none; }
+  .stomp { gap: 0.5rem; padding: 0.6rem 0.7rem 0.75rem; }
+  .stomp-type { min-height: 2.9rem; }
+  .stomp-knobs { min-height: 0; gap: 0.2rem; }
+  /* The footswitch sits beside the slot name. */
+  .stomp-top { min-height: 2.75rem; padding-right: 7.5rem; }
+  .footswitch { position: absolute; top: 0.6rem; right: 0.7rem; grid-auto-flow: column; align-items: center; gap: 0.45rem; min-height: 2.75rem; padding: 0 0.2rem; }
+  .fs-cap { width: 2.5rem; height: 2.5rem; box-shadow: 0 0 0 3px rgb(0 0 0 / 0.35), 0 3px 0 rgb(0 0 0 / 0.45), inset 0 -2px 4px rgb(0 0 0 / 0.35); }
+
+  .save { padding: 0.75rem; }
+  .save h2 { margin: 0 0 0.25rem; font-size: 1.05rem; }
+  .save .row, .save .row:not(.slider) { grid-template-columns: 1fr; gap: 0.2rem; margin: 0.4rem 0; }
+  .save .primary { width: 100%; margin-top: 0.25rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

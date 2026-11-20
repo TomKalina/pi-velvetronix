@@ -245,62 +245,142 @@ func TestBusyAndOpenError(t *testing.T) {
 	connect(t, env, b)
 }
 
-func TestSingleController(t *testing.T) {
+func TestSeveralControllers(t *testing.T) {
 	b, _ := start(t, &fakeEnv{})
-	c, ok := b.Attach("a")
-	if !ok {
-		t.Fatal("first attach failed")
+	var cs []*Controller
+	for i := 0; i < MaxControllers; i++ {
+		c, ok := b.Attach(false)
+		if !ok {
+			t.Fatalf("attach %d failed", i)
+		}
+		cs = append(cs, c)
 	}
-	if _, ok := b.Attach("b"); ok {
-		t.Fatal("second attach succeeded")
+	if _, ok := b.Attach(false); ok {
+		t.Fatal("attach beyond MaxControllers succeeded")
 	}
-	c.Detach()
-	c.Detach() // idempotent
-	c2, ok := b.Attach("b")
+	if n := b.Controllers(); n != MaxControllers {
+		t.Errorf("Controllers() = %d", n)
+	}
+	// Takeover drops the oldest.
+	c9, ok := b.Attach(true)
 	if !ok {
+		t.Fatal("takeover failed")
+	}
+	select {
+	case <-cs[0].Replaced():
+	default:
+		t.Fatal("oldest controller not dropped")
+	}
+	cs[0].Detach() // already dropped: must not release another slot
+	if _, ok := b.Attach(false); ok {
+		t.Fatal("dropped controller's detach freed a slot")
+	}
+	cs[1].Detach()
+	cs[1].Detach() // idempotent
+	if _, ok := b.Attach(false); !ok {
 		t.Fatal("attach after detach failed")
 	}
-	c.Detach() // stale controller must not detach the new one
-	if _, ok := b.Attach("a"); ok {
-		t.Fatal("stale detach released the new controller")
+	c9.Detach()
+}
+
+func TestRepliesRoutedEchoesShared(t *testing.T) {
+	env := &fakeEnv{}
+	b, _ := start(t, env)
+	env.mu.Lock()
+	env.devs = []midi.Device{testDev}
+	env.mu.Unlock()
+	p := connect(t, env, b)
+	c1, _ := b.Attach(false)
+	c2, _ := b.Attach(false)
+	ack := []byte{0xF0, 0x42, 0x30, 0x00, 0x01, 0x34, 0x23, 0xF7}
+	gain := []byte{0xF0, 0x42, 0x30, 0x00, 0x01, 0x34, 0x41, 0x04, 0x00, 0x2D, 0x00, 0xF7}
+
+	nak := []byte{0xF0, 0x42, 0x30, 0x00, 0x01, 0x34, 0x24, 0xF7}
+	if err := c1.Send(0, gain); err != nil {
+		t.Fatal(err)
 	}
+	if err := c2.Send(0, modeReq); err != nil {
+		t.Fatal(err)
+	}
+	if got := recv(t, p.out); !bytes.Equal(got, gain) {
+		t.Fatalf("first write % X", got)
+	}
+	// Nothing is shown to c2 before the amp confirms, and c2's request waits for the reply.
+	select {
+	case f := <-c2.Frames():
+		t.Fatalf("c2 got %+v before the ACK", f)
+	case got := <-p.out:
+		t.Fatalf("second request written before the reply: % X", got)
+	case <-time.After(50 * time.Millisecond):
+	}
+	p.in <- ack
+	if f := recv(t, c1.Frames()); f.Echo || !bytes.Equal(f.Data, ack) {
+		t.Errorf("c1 reply = %+v", f)
+	}
+	if f := recv(t, c2.Frames()); !f.Echo || !bytes.Equal(f.Data, gain) {
+		t.Errorf("c2 echo after ACK = %+v", f)
+	}
+	if got := recv(t, p.out); !bytes.Equal(got, modeReq) {
+		t.Fatalf("second write % X", got)
+	}
+	p.in <- nak
+	if f := recv(t, c2.Frames()); f.Echo || !bytes.Equal(f.Data, nak) {
+		t.Errorf("c2 reply = %+v", f)
+	}
+	// A refused frame is not echoed, and c1 does not get c2's reply.
+	select {
+	case f := <-c1.Frames():
+		t.Fatalf("c1 got %+v", f)
+	case <-time.After(50 * time.Millisecond):
+	}
+	// A knob turned on the amp goes to everyone.
+	p.in <- gain
+	for _, c := range []*Controller{c1, c2} {
+		if f := recv(t, c.Frames()); f.Echo || !bytes.Equal(f.Data, gain) {
+			t.Errorf("panel change = %+v", f)
+		}
+	}
+	c1.Detach()
 	c2.Detach()
 }
 
-func TestSameOwnerTakesOver(t *testing.T) {
+func TestObserver(t *testing.T) {
 	b, _ := start(t, &fakeEnv{})
-	c, _ := b.Attach("a")
-	c2, ok := b.Attach("a")
-	if !ok {
-		t.Fatal("same owner could not take over")
-	}
+	free := b.Observe()
 	select {
-	case <-c.Replaced():
+	case <-free.Freed():
 	default:
-		t.Fatal("old controller not told it was replaced")
+		t.Fatal("observer with a free slot not freed at once")
 	}
-	select {
-	case <-c2.Replaced():
-		t.Fatal("new controller marked replaced")
-	default:
-	}
-	c.Detach() // the replaced controller must not release the slot
-	if _, ok := b.Attach("b"); ok {
-		t.Fatal("other owner attached after takeover")
-	}
-	c2.Detach()
+	free.Close()
 
-	e, _ := b.Attach("")
-	if _, ok := b.Attach(""); ok {
-		t.Fatal("empty owner key took over")
+	var cs []*Controller
+	for i := 0; i < MaxControllers; i++ {
+		c, _ := b.Attach(false)
+		cs = append(cs, c)
 	}
-	e.Detach()
+	o := b.Observe()
+	defer o.Close()
+	select {
+	case <-o.Freed():
+		t.Fatal("observer freed while all slots are taken")
+	default:
+	}
+	cs[3].Detach()
+	select {
+	case <-o.Freed():
+	case <-time.After(2 * time.Second):
+		t.Fatal("observer not freed after a detach")
+	}
+	for _, c := range cs {
+		c.Detach()
+	}
 }
 
 func TestSendChecks(t *testing.T) {
 	env := &fakeEnv{}
 	b, logs := start(t, env)
-	c, _ := b.Attach("a")
+	c, _ := b.Attach(false)
 	defer c.Detach()
 
 	if err := c.Send(0, []byte{0xF0, 0xF7}); !errors.Is(err, midi.ErrBadFrame) {
@@ -323,6 +403,7 @@ func TestSendChecks(t *testing.T) {
 	if got := recv(t, p.out); !bytes.Equal(got, modeReq) {
 		t.Errorf("written % X", got)
 	}
+	p.in <- []byte{0xF0, 0x42, 0x30, 0x00, 0x01, 0x34, 0x42, 0x00, 0x03, 0xF7} // mode data: the next request may go
 
 	write := []byte{0xF0, 0x42, 0x30, 0x00, 0x01, 0x34, 0x11, 0x00, 0x03, 0xF7}
 	if err := c.Send(0, write); !errors.Is(err, midi.ErrSaveFlagRequired) {
@@ -355,7 +436,7 @@ func TestQueueFull(t *testing.T) {
 	b, _ := start(t, env)
 	p := recv(t, env.ports)
 	waitState(t, b, StateDetected)
-	c, _ := b.Attach("a")
+	c, _ := b.Attach(false)
 	defer c.Detach()
 
 	// The port accepts one frame (the inquiry), then the writer blocks on the next one.
@@ -368,6 +449,8 @@ func TestQueueFull(t *testing.T) {
 	}
 	<-p.out
 	<-p.out
+	// The writer now waits for the amp's reply before the next request.
+	p.in <- []byte{0xF0, 0x42, 0x30, 0x00, 0x01, 0x34, 0x42, 0x00, 0x03, 0xF7}
 	waitFor(t, func() bool { return c.Send(0, modeReq) == nil })
 }
 
@@ -387,21 +470,26 @@ func TestFramesForwarding(t *testing.T) {
 	b, logs := start(t, env)
 	p := connect(t, env, b) // no controller: identity reply dropped silently
 
-	c, _ := b.Attach("a")
+	c, _ := b.Attach(false)
 	defer c.Detach()
 	ack := []byte{0xF0, 0x42, 0x30, 0x00, 0x01, 0x34, 0x23, 0xF7}
 	p.in <- append(append([]byte{0xF8}, ack...), 0xFE)
-	if got := recv(t, c.Frames()); !bytes.Equal(got, ack) {
-		t.Errorf("forwarded % X", got)
+	if got := recv(t, c.Frames()); got.Echo || !bytes.Equal(got.Data, ack) {
+		t.Errorf("forwarded %+v", got)
 	}
 
 	// Controller not reading: buffer fills and further frames are dropped.
 	for i := 0; i < frameBufferSize+5; i++ {
 		p.in <- ack
 	}
-	waitFor(t, func() bool { return bytes.Contains([]byte(logs.String()), []byte("dropping amp frame")) })
+	waitFor(t, func() bool { return bytes.Contains([]byte(logs.String()), []byte("controller too slow, dropping frame")) })
 	if len(c.Frames()) != frameBufferSize {
 		t.Errorf("buffered %d frames", len(c.Frames()))
+	}
+	select {
+	case <-c.Lost():
+	default:
+		t.Error("dropped frames not signalled")
 	}
 }
 

@@ -21,8 +21,11 @@ export class AmpSync {
     private readonly onChange: () => void,
   ) {}
 
-  /** live = WebSocket open AND amp "connected" AND no update in progress. Reads only, never writes. */
-  update(live: boolean): void {
+  /**
+   * live = WebSocket open AND amp "connected" AND no update in progress. Reads only, never writes.
+   * keep = watching another controller: the model stays and follows its traffic, it is re-read once live.
+   */
+  update(live: boolean, keep = false): void {
     if (live === this.live) return;
     this.live = live;
     this.gen++;
@@ -30,11 +33,23 @@ export class AmpSync {
       this.read();
       return;
     }
+    if (keep) {
+      this.reading = false;
+      this.onChange();
+      return;
+    }
     this.client.reset();
     this.ready = false;
     this.reading = false;
     this.error = null;
     this.onChange();
+  }
+
+  /** Updates were missed: read again, even while a read runs (its earlier replies may be stale). */
+  resync(): void {
+    if (!this.live) return;
+    this.gen++;
+    this.read();
   }
 
   retry(): void {

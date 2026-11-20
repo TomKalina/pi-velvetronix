@@ -13,13 +13,15 @@ type bridgeAmp struct{ *bridge.Bridge }
 // FromBridge adapts *bridge.Bridge to Amp (Attach returns the Controller interface).
 func FromBridge(b *bridge.Bridge) Amp { return bridgeAmp{b} }
 
-func (a bridgeAmp) Attach(owner string) (Controller, bool) {
-	c, ok := a.Bridge.Attach(owner)
+func (a bridgeAmp) Attach(takeover bool) (Controller, bool) {
+	c, ok := a.Bridge.Attach(takeover)
 	if !ok {
 		return nil, false
 	}
 	return c, true
 }
+
+func (a bridgeAmp) Observe() Observer { return a.Bridge.Observe() }
 
 type fileUpdater struct{ stateDir, running string }
 

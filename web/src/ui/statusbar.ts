@@ -6,24 +6,29 @@ import { addressList, aliasLabel, ampStateLabel, wifiSummary, wsLabel } from "./
 
 type Level = "ok" | "warn" | "err" | "unknown";
 
-function chip(title: string): { el: HTMLElement; set(text: string, level: Level, hint?: string): void } {
+/** more: tail of the title hidden in the compact header, e.g. " (USB)". */
+function chip(title: string, extra = "", more = ""): { el: HTMLElement; set(text: string, level: Level, hint?: string): void } {
   const value = h("span", { class: "chip-value" });
-  const el = h("div", { class: "chip chip-unknown" }, h("span", { class: "dot", "aria-hidden": "true" }), h("span", { class: "chip-title" }, title), value);
+  const base = extra ? `chip ${extra}` : "chip";
+  const titleEl = h("span", { class: "chip-title" }, title, ...(more ? [h("span", { class: "chip-more" }, more)] : []));
+  const el = h("div", { class: `${base} chip-unknown` }, h("span", { class: "dot", "aria-hidden": "true" }), titleEl, value);
+  title += more;
   return {
     el,
     set(text, level, hint) {
       setText(value, text);
-      const cls = `chip chip-${level}`;
+      const cls = `${base} chip-${level}`;
       if (el.className !== cls) el.className = cls;
-      el.title = hint ?? "";
+      // The compact header (tablet and up) shows only the dot and title; the tooltip has the rest.
+      el.title = hint ? `${title}: ${text} (${hint})` : `${title}: ${text}`;
     },
   };
 }
 
 export function createStatusBar(ctx: Ctx): { el: HTMLElement; render(): void } {
   const wifi = chip("Wi-Fi");
-  const addr = chip("Adresa");
-  const amp = chip("Kombo (USB)");
+  const addr = chip("Adresa", "chip-addr");
+  const amp = chip("Kombo", "", " (USB)");
   const ctl = chip("Ovladač");
   const stale = h("div", { class: "stale", hidden: true }, "Zařízení neodpovídá, zobrazený stav může být starý.");
   const el = h("div", { class: "statusbar" }, h("div", { class: "chips" }, wifi.el, addr.el, amp.el, ctl.el), stale);
@@ -51,7 +56,7 @@ export function createStatusBar(ctx: Ctx): { el: HTMLElement; render(): void } {
       amp.set(text, lvl, d.amp.name ?? undefined);
     }
     const k = d.ws.kind;
-    ctl.set(wsLabel(d.ws), k === "open" ? "ok" : k === "busy" ? "err" : "warn");
+    ctl.set(wsLabel(d.ws), k === "open" ? "ok" : "warn");
   }
 
   return { el, render };

@@ -38,6 +38,17 @@ Skutečně provedené testy. Datum 2026-10-19, Raspberry Pi Zero 2 W Rev 1.0, Ra
 | Klient na hotspotu | Mac se připojil k `VOX-Velvetronix` | s výchozím PMF se **nepřipojil**; s `pmf=1` (vypnuto) DHCP 10.42.0.60, web, přihlášení, `mode: ap` |
 | Výpadek domácí sítě | `nmcli connection down` profilu domácí sítě | ztráta 11:46:16 → hotspot 11:47:51 (95 s) → po 5 min bez klientů návrat do domácí sítě 11:52:57; uložený profil beze změny |
 
+## Na zařízení, 2026-11-20 (Pi u komba, klient Raspberry Pi 5)
+
+| Test | Postup | Výsledek |
+|---|---|---|
+| Ukládání do slotu na skutečném kombu | MCP `vox_save_program` do A1 a A2 | kombo potvrdilo zápis, zpětné přečtení slotu bajtově shodné (`verified`) |
+| Písnička na skutečném kombu | MCP `vox_play_song` Seven Nation Army | 35 z 35 kroků potvrzeno, hlasitost programu beze změny |
+| Sdílené ovládání (0.4.1) | dvě záložky headless Firefoxu + třetí ovladač mění GAIN | obě záložky ukázaly novou hodnotu do 1 s, po vrácení zase původní |
+| Odmítnutá změna se nerozesílá | třetí ovladač poslal GAIN 101 (mimo rozsah) | kombo odmítlo, žádná záložka hodnotu neukázala |
+| Aktualizace přes web | 0.3.0 → 0.4.5 v deseti krocích (`scripts/dev-update.sh`) | všechny nainstalované a potvrzené |
+| Soubory pro plochu | `curl` na `/manifest.webmanifest`, `/apple-touch-icon.png`, `/icon-512.png` | 200 se správným typem, bez přihlášení |
+
 ## Neprovedeno / omezení
 
 - Ukládání do slotu na **skutečném** kombu a přežití vypnutí komba: ověřeno jen se simulátorem
@@ -46,5 +57,9 @@ Skutečně provedené testy. Datum 2026-10-19, Raspberry Pi Zero 2 W Rev 1.0, Ra
 - Brum/šum při připojeném Pi, zpětné napájení VBUS (měření multimetrem).
 - Tepelné chování v krabičce u komba.
 - Hotspot s telefony (iOS/Android), jen Mac.
-- Grafický režim a záložka Písničky (0.3.0) ověřené jen proti simulátoru v prohlížeči
-  (`npm run preview`), ne se skutečným kombem. Presety jsou přibližné.
+- Grafický režim a záložka Písničky ověřené proti simulátoru v prohlížeči (`npm run preview`)
+  a na skutečném kombu přes MCP; presety jsou přibližné.
+- Rozložení pro iPad 11" (0.4.2–0.4.4) ověřené jen v prohlížeči nastaveném na rozlišení iPadu,
+  ne na iPadu. Instalace na plochu (0.4.5) na iPadu zatím nevyzkoušená.
+- Změny z knobů přímo na kombu se podle protokolu promítají do stránky; na skutečném kombu
+  zatím nevyzkoušené.

@@ -58,7 +58,7 @@ describe("labels", () => {
   it("describes the WebSocket state", () => {
     expect(wsLabel({ kind: "open" })).toBe("připojeno");
     expect(wsLabel({ kind: "waiting", retryInMs: 4000 })).toBe("odpojeno, zkusím znovu za 4 s");
-    expect(wsLabel({ kind: "busy" })).toBe("Ovládání je otevřené v jiném prohlížeči");
+    expect(wsLabel({ kind: "watching" })).toBe("jen sleduji (plno)");
   });
 
   it("summarises Wi-Fi in home and hotspot mode", () => {

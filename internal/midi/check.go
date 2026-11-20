@@ -90,3 +90,19 @@ func IsIdentity(frame []byte) bool {
 		frame[4] == 0x02 && frame[5] == 0x42 && frame[6] == 0x34 && frame[7] == 0x01 &&
 		frame[len(frame)-1] == 0xF7
 }
+
+// IsReply reports whether an amp frame answers a host request (identity, ACK, NAK, format
+// error, write result, data dumps) rather than reporting a change made on the amp.
+func IsReply(frame []byte) bool {
+	if IsIdentity(frame) {
+		return true
+	}
+	switch korgFunc(frame) {
+	case 0x21, 0x22, 0x23, 0x24, 0x26, 0x40, 0x42, 0x4C, 0x65:
+		return true
+	}
+	return false
+}
+
+// IsAck reports whether an amp frame is the ACK (23) that confirms a host frame was applied.
+func IsAck(frame []byte) bool { return len(frame) == 8 && korgFunc(frame) == 0x23 }

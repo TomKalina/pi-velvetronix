@@ -16,8 +16,8 @@ function keysDeep(v: unknown, out: string[] = []): string[] {
 }
 
 describe("song presets", () => {
-  it("are 40, with unique ids and known genres", () => {
-    expect(SONGS).toHaveLength(40);
+  it("are 41, with unique ids and known genres", () => {
+    expect(SONGS).toHaveLength(41);
     expect(new Set(SONGS.map((s) => s.id)).size).toBe(SONGS.length);
     for (const s of SONGS) expect(GENRES).toContain(s.genre);
   });

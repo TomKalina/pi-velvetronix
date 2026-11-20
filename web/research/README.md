@@ -5,7 +5,7 @@ collected 2026-10-19. Not part of the build.
 
 - `names.json`, `names.md`: VT-X model/effect code names, the original each one imitates, confidence and sources.
   "VOX manual text" refers to text extracted from the VOX VT100X owner's manual and the VT-X MIDI implementation.
-- `songs.json`, `songs.md`: the 40 song presets with gear notes and sources.
+- `songs.json`, `songs.md`: the 41 song presets with gear notes and sources.
 
 `names.ts` was reviewed after generation: BRIT VM, SL-OD, CALI ELATION and ERUPT III CH2/CH3 are
 `inferred` there (no VOX description, single or disputed third-party source), although `names.json` lists
