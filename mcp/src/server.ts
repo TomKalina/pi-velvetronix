@@ -16,7 +16,13 @@ import {
   AMP_MODELS, AMP_PARAMS, BIAS_NAMES, CLASS_NAMES, EFFECT_PARAMS, PEDAL1_TYPES, PEDAL2_TYPES, REVERB_TYPES,
   USER_SLOT_NAMES, type EffectParam, type EffectType,
 } from "../../web/src/protocol/tables";
+import { parseVtxprog, programToSettings, VtxprogError } from "../../web/src/protocol/vtxprog";
 import { SONGS, type SongPreset } from "../../web/src/ui/songs";
+import { VTX_PRESETS } from "../../web/src/ui/vtx-presets";
+import { readFile } from "node:fs/promises";
+
+/** Song presets plus the bundled Tone Room (.vtxprog) presets, as in the Písničky tab. */
+const ALL_SONGS: readonly SongPreset[] = [...SONGS, ...VTX_PRESETS];
 
 const BASE = (process.env.VOX_URL ?? "http://velvetronix.local").replace(/\/+$/, "");
 const PASSWORD = process.env.VOX_PASSWORD ?? "";
@@ -401,11 +407,11 @@ server.registerTool("vox_set_sound", {
 
 server.registerTool("vox_list_songs", {
   title: "List song presets",
-  description: "Lists the song presets built into pi-velvetronix (the Písničky tab). Optional case-insensitive search in title, artist and genre.",
+  description: "Lists the song presets built into pi-velvetronix (the Písničky tab), including the Tone Room presets from .vtxprog files (genre \"tone-room\"). Optional case-insensitive search in title, artist and genre.",
   inputSchema: { query: z.string().optional() },
 }, ({ query }) => guarded(async () => {
   const q = query ? norm(query) : "";
-  return SONGS.filter((s) => !q || norm(`${s.title} ${s.artist} ${s.genre}`).includes(q)).map(songSummary);
+  return ALL_SONGS.filter((s) => !q || norm(`${s.title} ${s.artist} ${s.genre}`).includes(q)).map(songSummary);
 }));
 
 server.registerTool("vox_play_song", {
@@ -413,9 +419,40 @@ server.registerTool("vox_play_song", {
   description: "Sets one of the built-in song presets live (same as Zahrát in the UI; nothing is saved).",
   inputSchema: { id: z.string().describe("Song id from vox_list_songs.") },
 }, ({ id }) => guarded(async () => {
-  const song = SONGS.find((s) => s.id === id);
+  const song = ALL_SONGS.find((s) => s.id === id);
   if (!song) throw new UserError(`Unknown song id "${id}".`);
   return amp.use(async (c) => ({ song: { ...songSummary(song), description: song.description }, result: await c.audition(song) }));
+}));
+
+async function readVtxprog(path: string) {
+  try {
+    return parseVtxprog(new Uint8Array(await readFile(path)));
+  } catch (e) {
+    if (e instanceof VtxprogError) throw new UserError(`Not a usable .vtxprog file: ${e.code}.`);
+    throw new UserError(`Cannot read ${path}: ${e instanceof Error ? e.message : String(e)}`);
+  }
+}
+
+server.registerTool("vox_read_vtxprog", {
+  title: "Read a .vtxprog file",
+  description: "Lists the programs in a Tone Room bank file (.vtxprog) on this machine, with their full settings. Needs no amp connection.",
+  inputSchema: { path: z.string().describe("Path to the .vtxprog file.") },
+}, ({ path }) => guarded(async () => (await readVtxprog(path)).map((e) =>
+  "error" in e ? { index: e.index, error: e.error } : { index: e.index, ...describeProgram(e.program) },
+)));
+
+server.registerTool("vox_play_vtxprog", {
+  title: "Play a program from a .vtxprog file",
+  description: "Sets one program of a Tone Room bank file (.vtxprog) on this machine live (nothing is saved, program VOLUME is not sent).",
+  inputSchema: {
+    path: z.string().describe("Path to the .vtxprog file."),
+    index: z.number().int().min(0).describe("Program index from vox_read_vtxprog (0-based)."),
+  },
+}, ({ path, index }) => guarded(async () => {
+  const e = (await readVtxprog(path)).find((x) => x.index === index);
+  if (!e) throw new UserError(`The file has no program ${index}.`);
+  if ("error" in e) throw new UserError(`Program ${index} has a value the amp does not accept: ${e.error}`);
+  return amp.use(async (c) => ({ program: e.program.name, result: await c.audition(programToSettings(e.program)) }));
 }));
 
 server.registerTool("vox_select_program", {

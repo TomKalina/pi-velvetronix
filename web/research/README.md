@@ -12,3 +12,6 @@ collected 2026-10-19. Not part of the build.
 them as `secondary`.
 In `songs.ts`, "Praha" (Sto zvířat) is filed under `ska-punk` and the Plexis "Svět jsou bary" cover claim
 is marked as unverified.
+- `vtxprog/<autor>/`: soubory `.vtxprog` z aplikace VOX Tone Room převzaté od komunity, s licencí
+  a commitem zdroje (`COMMIT`). `node scripts/vtx-presets.mjs` z nich vygeneruje
+  `src/ui/vtx-presets.ts` (bez duplicit a bez programů s hodnotou mimo rozsah).

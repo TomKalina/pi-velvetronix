@@ -1,15 +1,19 @@
 # pi-velvetronix MCP server
 
-MCP server (stdio), který ovládá kombo přes daemon pi-velvetronix stejně jako webové UI:
-přihlásí se přes `/api/login`, připojí se jako ovladač na `/ws` a posílá zprávy přes
-`web/src/protocol` (sdílený kód s webem, žádná kopie protokolu).
+**English** · [Česky](README.cs.md)
 
-Nástroje: `vox_status`, `vox_catalog`, `vox_set_sound` (živě, nic neukládá, nemění VOLUME),
-`vox_list_songs`, `vox_play_song`, `vox_select_program`, `vox_save_program` (přepíše slot),
-`vox_disconnect`.
+An MCP server (stdio) that controls the amp through the pi-velvetronix daemon the same way the web
+UI does: it logs in with `/api/login`, connects as a controller to `/ws` and sends messages through
+`web/src/protocol` (code shared with the web UI, no copy of the protocol).
 
-Kombo může ovládat až 8 oken a MCP server najednou. Otevřené stránky vidí změny z MCP živě.
-Po 8 s bez volání se server odpojí. Když je plno, `?takeover=1` odpojí nejstarší okno.
+Tools: `vox_status`, `vox_catalog`, `vox_set_sound` (live, saves nothing, does not change VOLUME),
+`vox_list_songs` and `vox_play_song` (songs and Tone Room presets), `vox_read_vtxprog` and
+`vox_play_vtxprog` (a .vtxprog file on disk), `vox_select_program`, `vox_save_program` (overwrites
+the slot), `vox_disconnect`.
+
+Up to 8 windows and the MCP server can control the amp at once. Open pages see the MCP server's
+changes live. The server disconnects after 8 s without a call. When all slots are taken,
+`?takeover=1` drops the oldest window.
 
 ```sh
 cd mcp && npm ci && npm run build

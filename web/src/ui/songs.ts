@@ -2,7 +2,7 @@
 // web/research/songs.json (2026-10-19). Values are raw amp values (0..100 knobs, mHz, ms) per docs/protocol.md §5;
 // there is deliberately no program VOLUME anywhere. Gear sources per preset are in web/research/songs.md.
 
-export const GENRES = ["punk","pop-punk","skate-punk","hardcore","ska-punk","czech-punk","rock"] as const;
+export const GENRES = ["punk","pop-punk","skate-punk","hardcore","ska-punk","czech-punk","rock","tone-room"] as const;
 export type Genre = (typeof GENRES)[number];
 
 export interface SongEffect {
@@ -20,6 +20,8 @@ export interface SongPreset {
   description: string;
   /** Gear source for this preset; null = set from the general style of the band. */
   source: string | null;
+  /** Link text for source (default "Zdroj vybavení"), or the note shown when there is no link. */
+  sourceNote?: string;
   amp: {
     model: number;
     gain: number; treble: number; middle: number; bass: number; presence: number; resonance: number;
@@ -434,9 +436,9 @@ export const SONGS: readonly SongPreset[] = [
   },
 {
     id: "white-stripes-seven-nation-army", title: "Seven Nation Army", artist: "The White Stripes", year: 2003, genre: "rock",
-    description: "Jack White: archtop Kay s jedním snímačem u krku, DigiTech Whammy o oktávu dolů a za ním Big Muff do komba Silvertone 1485. FUZZ s vysokým drive do TWEED 4x10 NORMAL. Kombo nemá oktávový efekt, takže riff zní o oktávu výš než na desce; pomůže krkový snímač a ubraný tón na kytaře.",
+    description: "Jack White: archtop Kay s jedním snímačem u krku, DigiTech Whammy o oktávu dolů a za ním Big Muff do komba Silvertone 1485. FUZZ s vysokým drive do TWEED 4x10 NORMAL; nastavení zesilovače leží v rozmezí odhadů z Guitar World, TonesMatch, ToneMirror a Guitar Chalk (gain 4–6, středy 5–6, výšky 6,5–7). Kombo nemá oktávový efekt, takže riff zní o oktávu výš než na desce; pomůže krkový snímač a ubraný tón na kytaře.",
     source: "https://www.guitarworld.com/gear/secrets-behind-jack-white-guitar-sound-white-stripes-seven-nation-army",
-    amp: { model: 3, gain: 45, treble: 65, middle: 55, bass: 60, presence: 50, resonance: 55, brightCap: 0, lowCut: 0, midBoost: 0, bias: 0, ampClass: 1 },
+    amp: { model: 3, gain: 50, treble: 65, middle: 55, bass: 60, presence: 50, resonance: 55, brightCap: 0, lowCut: 0, midBoost: 0, bias: 0, ampClass: 1 },
     nr: 30,
     pedal1: { on: true, type: 9, params: [85, 65, 50, 50, 55, 60] },
     pedal2: { on: false, type: 5, params: [350, 25, 20, 50, 0, 0] },

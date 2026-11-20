@@ -8,12 +8,41 @@ import { filterSongs, presetName } from "./logic";
 import { shownName, type NameKind } from "./names";
 import { namesSwitch } from "./names-switch";
 import { prefs } from "./prefs";
+import { parseVtxprog, programToSettings, VtxprogError } from "../protocol/vtxprog";
 import { GENRES, SONGS, type Genre, type SongPreset } from "./songs";
+import { VTX_PRESETS } from "./vtx-presets";
 
 const GENRE_LABEL: Record<Genre, string> = {
   punk: "punk", "pop-punk": "pop-punk", "skate-punk": "skate-punk", hardcore: "hardcore",
-  "ska-punk": "ska-punk", "czech-punk": "český punk", rock: "rock",
+  "ska-punk": "ska-punk", "czech-punk": "český punk", rock: "rock", "tone-room": "Tone Room",
 };
+
+const VTXPROG_ERROR: Record<VtxprogError["code"], string> = {
+  not_vtxprog: "Tohle není soubor .vtxprog z aplikace Tone Room.",
+  bad_length: "Soubor .vtxprog je poškozený (nesedí délka).",
+  too_many: "Soubor .vtxprog má víc programů, než Tone Room umí (11).",
+};
+
+/** Song presets from a .vtxprog file the user picked; only for this page visit. */
+function presetsFromFile(file: string, bytes: Uint8Array, serial: number): { presets: SongPreset[]; skipped: number } {
+  const entries = parseVtxprog(bytes);
+  const presets: SongPreset[] = [];
+  for (const e of entries) {
+    if ("error" in e) continue;
+    presets.push({
+      id: `upload-${serial}-${e.index + 1}`,
+      title: e.program.name.trim() || `Program ${e.index + 1}`,
+      artist: file.replace(/\.vtxprog$/i, ""),
+      year: null,
+      genre: "tone-room",
+      description: `Program ${e.index + 1} z nahraného souboru „${file}“. Zůstane tu jen do zavření stránky; uložit ho můžete do kanálu komba.`,
+      source: null,
+      sourceNote: "Nahraný soubor",
+      ...programToSettings(e.program),
+    });
+  }
+  return { presets, skipped: entries.length - presets.length };
+}
 
 type Outcome = { song: SongPreset; result: AuditionResult } | { song: SongPreset; error: string };
 
@@ -45,15 +74,41 @@ export function createSongs(ctx: Ctx): { el: HTMLElement; render(): void } {
   );
   const count = h("p", { class: "muted small song-count", "aria-live": "polite" });
   const gateNote = h("p", { class: "msg msg-warn", hidden: true });
+  const fileInput = h("input", { type: "file", id: "vtxprog-file", accept: ".vtxprog", class: "visually-hidden" });
+  const fileBtn = h("label", { htmlFor: "vtxprog-file", class: "chip-btn file-btn" }, "Nahrát soubor .vtxprog");
+  const fileMsg = h("p", { class: "msg", hidden: true, "aria-live": "polite" });
+  let uploads = 0;
+  fileInput.addEventListener("change", async () => {
+    const f = fileInput.files?.[0];
+    fileInput.value = "";
+    if (!f) return;
+    fileMsg.hidden = false;
+    try {
+      const { presets, skipped } = presetsFromFile(f.name, new Uint8Array(await f.arrayBuffer()), ++uploads);
+      addCards(presets, true);
+      genre = "tone-room";
+      query = "";
+      search.value = "";
+      renderList();
+      render();
+      fileMsg.className = presets.length ? "msg msg-ok" : "msg msg-warn";
+      const skip = skipped ? ` ${skipped} programů má hodnotu mimo rozsah komba, ty jsou vynechané.` : "";
+      setText(fileMsg, `Ze souboru „${f.name}“ je načteno ${presets.length} programů, jsou nahoře v seznamu.${skip}`);
+    } catch (e) {
+      fileMsg.className = "msg msg-err";
+      setText(fileMsg, e instanceof VtxprogError ? VTXPROG_ERROR[e.code] : "Soubor se nepodařilo přečíst.");
+    }
+  });
 
   const head = h(
     "section",
     { class: "card songs-head" },
     h("div", { class: "songs-title" }, h("h2", null, "Písničky"), names.el),
-    h("p", { class: "muted" }, "Tlačítko Zahrát nastaví zvuk v kombu živě. Hlasitost programu (VOLUME) aplikace neposílá a nic se neukládá."),
+    h("p", { class: "muted" }, "Tlačítko Zahrát nastaví zvuk v kombu živě. Hlasitost programu (VOLUME) aplikace neposílá a nic se neukládá. Žánr Tone Room jsou presety ze souborů .vtxprog; vlastní soubor můžete nahrát."),
     search,
-    h("div", { class: "chips-row", role: "group", "aria-label": "Žánr" }, ...chips),
+    h("div", { class: "chips-row", role: "group", "aria-label": "Žánr" }, ...chips, fileInput, fileBtn),
     count,
+    fileMsg,
     gateNote,
   );
 
@@ -78,15 +133,18 @@ export function createSongs(ctx: Ctx): { el: HTMLElement; render(): void } {
   const empty = h("p", { class: "muted", hidden: true }, "Nic nenalezeno. Zkuste jiné slovo nebo žánr „vše“.");
   const el = h("div", { class: "screen" }, head, list, empty, dock);
 
-  const cards = SONGS.map((s) => {
+  let namesShown = "";
+  const all: SongPreset[] = [];
+  const cards: { s: SongPreset; card: HTMLElement; amp: HTMLElement; fx: HTMLElement; play: HTMLButtonElement }[] = [];
+  const makeCard = (s: SongPreset) => {
     const amp = h("span", { class: "song-amp-name" });
     const fx = h("span", { class: "song-fx-name" });
     const play = h("button", { type: "button", class: "primary play" }, "Zahrát");
     play.addEventListener("click", () => void audition(s));
     const meta = [s.artist, s.year === null ? null : String(s.year)].filter(Boolean).join(", ");
     const source = s.source
-      ? h("a", { href: s.source, target: "_blank", rel: "noopener noreferrer", class: "small" }, "Zdroj vybavení")
-      : h("span", { class: "small muted" }, "Nastaveno podle stylu kapely");
+      ? h("a", { href: s.source, target: "_blank", rel: "noopener noreferrer", class: "small" }, s.sourceNote ?? "Zdroj vybavení")
+      : h("span", { class: "small muted" }, s.sourceNote ?? "Nastaveno podle stylu kapely");
     const card = h(
       "article",
       { class: "card song", "data-id": s.id },
@@ -96,8 +154,22 @@ export function createSongs(ctx: Ctx): { el: HTMLElement; render(): void } {
       h("div", { class: "song-foot" }, source, play),
     );
     return { s, card, amp, fx, play };
-  });
-  list.append(...cards.map((c) => c.card));
+  };
+  /** first: put the new cards at the top of the list (uploaded files). */
+  function addCards(songs: readonly SongPreset[], first = false): void {
+    const made = songs.map(makeCard);
+    if (first) {
+      all.unshift(...songs);
+      cards.unshift(...made);
+      list.prepend(...made.map((c) => c.card));
+    } else {
+      all.push(...songs);
+      cards.push(...made);
+      list.append(...made.map((c) => c.card));
+    }
+    namesShown = ""; // new cards need their amp and effect names
+  }
+  addCards([...SONGS, ...VTX_PRESETS]);
 
   async function audition(song: SongPreset): Promise<void> {
     if (running || !gateOf(ctx).enabled) return;
@@ -158,17 +230,16 @@ export function createSongs(ctx: Ctx): { el: HTMLElement; render(): void } {
     }
   }
 
-  let namesShown = "";
   function renderList(): void {
     chips.forEach((c, i) => {
       const on = (i === 0 ? null : GENRES[i - 1]) === genre;
       c.classList.toggle("on", on);
       c.setAttribute("aria-pressed", String(on));
     });
-    const shown = new Set(filterSongs(SONGS, query, genre));
+    const shown = new Set(filterSongs(all, query, genre));
     for (const c of cards) c.card.hidden = !shown.has(c.s);
     empty.hidden = shown.size > 0;
-    setText(count, shown.size === SONGS.length ? `${SONGS.length} písniček` : `${shown.size} z ${SONGS.length} písniček`);
+    setText(count, shown.size === all.length ? `${all.length} zvuků` : `${shown.size} z ${all.length} zvuků`);
   }
 
   function render(): void {

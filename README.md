@@ -1,271 +1,287 @@
 # pi-velvetronix
 
-Dálkové ovládání komba **VOX Valvetronix VT100X** (řada VT-X) z tabletu, telefonu nebo počítače
-přes Wi-Fi. Malé Raspberry Pi Zero 2 W je USB kabelem připojené ke kombu, vytváří českou webovou
-aplikaci a posílá kombu příkazy přes USB-MIDI. Funguje v lokální síti bez internetu a bez
-aplikace VOX Tone Room.
+**English** · [Česky](README.cs.md)
 
-![Ovládání na iPadu na šířku: panel komba s knoby a tři pedály](docs/img/ipad-graficky.png)
+Remote control for the **VOX Valvetronix VT100X** amp (VT-X series) from a tablet, phone or
+computer over Wi-Fi. A small Raspberry Pi Zero 2 W is connected to the amp with a USB cable,
+serves a web app (the interface is in Czech) and sends commands to the amp over USB-MIDI. It
+works on the local network without internet and without the VOX Tone Room app.
 
-## Co umí
+![Control on an iPad in landscape: the amp panel with its knobs and three pedals](docs/img/ipad-graficky.png)
 
-- **Panel komba na obrazovce.** Model zesilovače, otočné knoby (GAIN, TREBLE, MIDDLE, BASS,
-  VOLUME, PRESENCE, RESONANCE, NOISE REDUCTION), přepínače BRIGHT CAP, LOW CUT, MID BOOST, BIAS
-  a CLASS, banky a kanály A1–B4. Pedály vypadají jako krabičky s nožním spínačem v barvě
-  napodobovaného pedálu.
-- **Dva režimy.** **Grafický** (panel jako na kombu) a **Technický** (posuvníky a seznamy).
-  Přepínač názvů **originál / z komba**, např. „Marshall JCM800“ místo „BRIT 800“. Předlohy
-  pedálů a některých zesilovačů VOX oficiálně neuvádí: nejisté názvy jsou označené „~“
-  a podtržené, zdroje jsou ve `web/research/`.
-- **Písničky.** 41 přibližných zvuků slavných písniček, hlavně punk (punk, pop-punk, skate-punk,
-  hardcore, ska-punk, český punk) a rockové klasiky, např. Seven Nation Army. **Zahrát** nastaví
-  zvuk v kombu jen živě, nemění hlasitost programu a nic neukládá.
-- **Ukládání do kanálů.** Zvuk jde uložit pod vlastním jménem (max. 16 znaků) do A1–B4. Kombo
-  zápis potvrdí a aplikace ho ověří zpětným přečtením.
-- **Víc ovladačů najednou, všechno živě.** Kombo může současně ovládat až 8 oken: tablet,
-  telefon, další záložka nebo MCP server pro Clauda (`mcp/`). Každé okno hned vidí, co změnila
-  ostatní, i co se otočí přímo na kombu.
-- **Aplikace na ploše iPadu.** V Safari Sdílet → Přidat na plochu: vlastní ikona, celá obrazovka
-  bez lišt Safari (viz [Instalace na plochu](#instalace-na-plochu-ipadu-nebo-telefonu)).
-- **Rozložení pro tablet a telefon.** Na iPadu 11" se celý panel s pedály vejde na jednu obrazovku
-  na šířku i na výšku. Na telefonu je krátká hlavička (název, tečky stavu, záložky) a pedály se
-  přepínají záložkami Pedál 1 / Pedál 2 / Reverb, které ukazují i zapnutí a typ efektu.
-- **Bez zásahu do paměti komba, dokud to nechceš.** Pi nepustí zápis do paměti komba (`4C`, `11`),
-  pokud zpráva není označená jako výslovné uložení. Start, připojení ani aktualizace nic
-  nepřepisují.
-- Wi-Fi nastavení, záložní hotspot `VOX-Velvetronix`, aktualizace firmwaru přes web s návratem
-  na předchozí verzi, když nová nenaběhne.
+## Features
 
-Power Level je na kombu analogový a dálkově ovládat nejde.
+- **The amp panel on screen.** Amp model, rotary knobs (GAIN, TREBLE, MIDDLE, BASS, VOLUME,
+  PRESENCE, RESONANCE, NOISE REDUCTION), the BRIGHT CAP, LOW CUT, MID BOOST, BIAS and CLASS
+  switches, banks and channels A1–B4. Pedals look like stompboxes with a footswitch, in the colour
+  of the pedal they model.
+- **Two views.** **Grafický** (graphic: the panel as on the amp) and **Technický** (technical:
+  sliders and lists). A name switch **originál / z komba** (original / from the amp) shows e.g.
+  "Marshall JCM800" instead of "BRIT 800". VOX does not officially name the originals of the pedals
+  and some amps: uncertain names are marked "~" and underlined, sources are in `web/research/`.
+- **Songs.** 41 approximate sounds of famous songs, mostly punk (punk, pop-punk, skate-punk,
+  hardcore, ska-punk, Czech punk) and rock classics such as Seven Nation Army. **Zahrát** (play)
+  sets the sound on the amp live only, does not change the program volume and saves nothing.
+- **Tone Room presets (.vtxprog).** The **Tone Room** genre holds 59 community presets (Arctic
+  Monkeys, Foo Fighters, Queen, QOTSA, Slipknot, The Strokes…) from the files of
+  [marcosmoura/toneroom-presets](https://github.com/marcosmoura/toneroom-presets) (Beerware licence).
+  Your own `.vtxprog` file from the VOX Tone Room app can be loaded with the **Nahrát soubor
+  .vtxprog** button, and its programs played or saved to a channel.
+- **Saving to channels.** A sound can be saved under its own name (up to 16 characters) to A1–B4.
+  The amp confirms the write and the app verifies it by reading the slot back.
+- **Several controllers at once, all live.** Up to 8 windows can control the amp at the same time:
+  a tablet, a phone, another tab, or the MCP server for Claude (`mcp/`). Every window sees at once
+  what the others changed, and what was turned on the amp itself.
+- **Home-screen app on the iPad.** In Safari, Share → Add to Home Screen: its own icon, full screen
+  without the Safari bars (see [Add to the home screen](#add-to-the-home-screen-of-an-ipad-or-phone)).
+- **Tablet and phone layouts.** On an 11" iPad the whole panel with the pedals fits on one screen,
+  in landscape and in portrait. On a phone the header is short (name, status dots, tabs) and the
+  pedals are switched with the Pedál 1 / Pedál 2 / Reverb tabs, which also show whether each pedal
+  is on and its effect type.
+- **The amp's memory stays untouched until you say so.** The Pi blocks writes to the amp's memory
+  (`4C`, `11`) unless the message is marked as an explicit save. Start-up, connecting and updates
+  never overwrite anything.
+- Wi-Fi settings, a fallback hotspot `VOX-Velvetronix`, firmware updates over the web with a
+  return to the previous version if the new one does not start.
 
-| Technický režim | Písničky |
+Power Level is an analogue control on the amp and cannot be set remotely.
+
+| Technical view | Songs |
 |---|---|
-| ![Technický režim: programy, posuvníky zesilovače a efektů](docs/img/ipad-technicky.png) | ![Seznam písniček s tlačítkem Zahrát](docs/img/pisnicky.png) |
+| ![Technical view: programs, amp and effect sliders](docs/img/ipad-technicky.png) | ![List of songs with the play button](docs/img/pisnicky.png) |
 
-| iPad na výšku | Telefon |
+| iPad in portrait | Phone |
 |---|---|
-| ![Grafický režim na iPadu na výšku](docs/img/ipad-na-vysku.png) | ![Grafický režim na telefonu](docs/img/telefon.png) |
+| ![Graphic view on an iPad in portrait](docs/img/ipad-na-vysku.png) | ![Graphic view on a phone](docs/img/telefon.png) |
 
-Obrázky jsou z náhledu se simulovaným kombem (`cd web && npm run preview`).
+The screenshots come from the preview with a simulated amp (`cd web && npm run preview`).
 
-## Jak to funguje
+## How it works
 
 ```
-tablet / telefon / Claude ──Wi-Fi── Pi Zero 2 W ──USB (OTG)── VOX VT100X
-  web + protokol VOX             Go daemon:                  zvuk, programy
-  (TypeScript), MCP server       WebSocket ↔ ALSA rawmidi
-                                 fronta povelů, rozesílání,
-                                 přihlášení, Wi-Fi, mDNS,
-                                 aktualizace s rollbackem
+tablet / phone / Claude ──Wi-Fi── Pi Zero 2 W ──USB (OTG)── VOX VT100X
+  web + VOX protocol            Go daemon:                  sound, programs
+  (TypeScript), MCP server      WebSocket ↔ ALSA rawmidi
+                                command queue, forwarding,
+                                login, Wi-Fi, mDNS,
+                                updates with rollback
 ```
 
-- Protokol VOXu běží v prohlížeči (`web/src/protocol/`), stejný kód používá MCP server. Pi předává
-  celé SysEx zprávy a kontroluje je.
-- Každé okno je s Pi spojené přes WebSocket `/ws`. Daemon povely od všech oken posílá kombu po
-  jednom a odpověď vrátí odesílateli. Kombo totiž odpovídá jen „OK“ a neříká komu. Změnu, kterou
-  kombo potvrdí, daemon rozešle ostatním oknům. Změny z knobů na kombu dostanou všechna okna.
-- Podklady: protokol [docs/protocol.md](docs/protocol.md) (z oficiální „Valvetronix X MIDI
-  Implementation v1.0“ a projektu [vox-amp-librarian](https://github.com/tmarsteel/vox-amp-librarian),
-  MIT licence, Copyright (c) 2023 Tobias Marstaller), návrh a rozhraní [docs/design.md](docs/design.md),
-  záznam testů [docs/testing.md](docs/testing.md).
+- The VOX protocol runs in the browser (`web/src/protocol/`); the MCP server uses the same code.
+  The Pi passes whole SysEx messages through and checks them.
+- Every window is connected to the Pi through the WebSocket `/ws`. The daemon sends the commands
+  from all windows to the amp one at a time and returns each reply to its sender, because the amp
+  only answers "OK" and does not say to whom. Once the amp confirms a change, the daemon forwards
+  it to the other windows. Changes made with the knobs on the amp go to all windows.
+- Background: the protocol in [docs/protocol.md](docs/protocol.md) (from the official "Valvetronix X
+  MIDI Implementation v1.0" and the [vox-amp-librarian](https://github.com/tmarsteel/vox-amp-librarian)
+  project, MIT licence, Copyright (c) 2023 Tobias Marstaller), the design and interfaces in
+  [docs/design.md](docs/design.md), the test log in [docs/testing.md](docs/testing.md).
 
-## Instalace na plochu iPadu nebo telefonu
+## Add to the home screen of an iPad or phone
 
-1. Otevři v Safari `http://velvetronix.local` a přihlas se.
-2. Klepni na **Sdílet** → **Přidat na plochu** → **Přidat**.
-3. Na ploše se objeví ikona **VOX**. Otevře aplikaci přes celou obrazovku.
+1. Open `http://velvetronix.local` in Safari and log in.
+2. Tap **Share** → **Add to Home Screen** → **Add**.
+3. A **VOX** icon appears on the home screen. It opens the app full screen.
 
-Aplikace na ploše má vlastní přihlášení, odděleně od Safari, takže se v ní přihlas jednou znovu.
-Přihlášení vydrží 30 dní. Bez spojení s Pi aplikace nefunguje: web běží přes HTTP v lokální síti,
-a v takovém prostředí prohlížeče nedovolí offline režim (service worker).
+The home-screen app has its own login, separate from Safari, so log in once more there. The login
+lasts 30 days. The app does not work without a connection to the Pi: the web runs over HTTP on the
+local network, where browsers do not allow an offline mode (service worker).
 
-## MCP server pro Clauda
+## MCP server for Claude
 
-`mcp/` obsahuje MCP server, přes který může Claude kombo číst a nastavovat: stav, živé nastavení
-zvuku, písničky, přepnutí a uložení programu. Otevřené stránky vidí jeho změny živě. Sestavení
-a registrace jsou v [mcp/README.md](mcp/README.md).
+`mcp/` holds an MCP server through which Claude can read and set the amp: status, live sound,
+songs and Tone Room presets, `.vtxprog` files, selecting and saving programs. Open pages see its
+changes live. Building and registering it is described in [mcp/README.md](mcp/README.md).
 
-## Hardware a zapojení
+## Hardware and wiring
 
-| Díl | Poznámka |
+| Part | Note |
 |---|---|
-| Raspberry Pi Zero 2 W | ověřeno: `Raspberry Pi Zero 2 W Rev 1.0`, Raspberry Pi OS Lite 64-bit (Debian 13 trixie), kernel 6.18 |
-| Zdroj 5,1 V / 2,5 A s micro-USB | oficiální Raspberry Pi zdroj (např. Alza `RKpi3na125`). Do portu **PWR IN** |
-| OTG adaptér micro-USB (samec) → USB-A (samice) | např. Alza `ugre27`, oficiální „Raspberry Pi Zero USB adapter“ |
-| Kabel USB-A → konektor komba | VT100X má podle japonského manuálu, nákresu panelu a webu VOX zásuvku **USB mini-B** (anglický manuál píše „Type B“). **Před nákupem zkontroluj zásuvku na horním panelu.** Krátký (0,5-1 m), stíněný |
+| Raspberry Pi Zero 2 W | verified: `Raspberry Pi Zero 2 W Rev 1.0`, Raspberry Pi OS Lite 64-bit (Debian 13 trixie), kernel 6.18 |
+| 5.1 V / 2.5 A power supply with micro-USB | the official Raspberry Pi supply (e.g. Alza `RKpi3na125`). Into the **PWR IN** port |
+| OTG adapter micro-USB (male) → USB-A (female) | e.g. Alza `ugre27`, the official "Raspberry Pi Zero USB adapter" |
+| Cable USB-A → the amp's connector | According to the Japanese manual, the panel drawing and the VOX website, the VT100X has a **USB mini-B** socket (the English manual says "Type B"). **Check the socket on the top panel before buying.** Short (0.5–1 m), shielded |
 
-Porty na Pi Zero 2 W (při pohledu na desku, mini-HDMI vlevo):
+Ports on the Pi Zero 2 W (looking at the board, mini-HDMI on the left):
 
-- **USB** (prostřední micro-USB, blíž k mini-HDMI) = data, host pro kombo. Sem OTG adaptér.
-- **PWR IN** (krajní micro-USB v rohu) = jen napájení. Sem zdroj.
+- **USB** (the middle micro-USB, closer to the mini-HDMI) = data, host for the amp. The OTG adapter
+  goes here.
+- **PWR IN** (the outer micro-USB in the corner) = power only. The power supply goes here.
 
 ```
-zdroj 5 V ──micro-USB──> [PWR IN]  Pi Zero 2 W  [USB] ──OTG adaptér──> USB-A ──kabel──> VOX (mini-B)
+5 V supply ──micro-USB──> [PWR IN]  Pi Zero 2 W  [USB] ──OTG adapter──> USB-A ──cable──> VOX (mini-B)
 ```
 
-Napájení a VBUS:
+Power and VBUS:
 
-- Pi napájí **vždy samostatný zdroj**. Kombo Pi nenapájí a napájet nemá.
-- V host režimu Pi posílá na VBUS datového portu 5 V ze své napájecí větve (bez spínače
-  a pojistky; oficiální schéma to nekreslí, potvrzují to měření komunity). Kombo je napájené
-  ze sítě a z USB prakticky nic neodebírá.
-- Zpětné napájení: USB zařízení nesmí VBUS budit. Jednou to můžeš ověřit multimetrem: kombo
-  zapnuté, Pi odpojené, mezi VBUS a GND na kabelu od komba má být ~0 V.
-- Nepřipojuj datový port Pi k počítači, když je zároveň zapojený zdroj v PWR IN (dva 5V zdroje
-  proti sobě).
-- Výchozí USB ovladač `dwc_otg` přepne do host režimu podle ID pinu OTG adaptéru. Kdyby
-  kabel ID pin neuzemnil, přidej do `/boot/firmware/config.txt` řádek
-  `dtoverlay=dwc2,dr_mode=host` a restartuj.
+- The Pi is **always powered by its own supply**. The amp does not power the Pi and must not.
+- In host mode the Pi puts 5 V from its supply rail on the data port's VBUS (without a switch or
+  fuse; the official schematic does not show it, community measurements confirm it). The amp is
+  mains-powered and draws practically nothing from USB.
+- Back-feeding: a USB device must not drive VBUS. You can check it once with a multimeter: amp on,
+  Pi disconnected, there should be ~0 V between VBUS and GND on the cable from the amp.
+- Do not connect the Pi's data port to a computer while a supply is plugged into PWR IN (two 5 V
+  supplies against each other).
+- The default USB driver `dwc_otg` switches to host mode based on the OTG adapter's ID pin. If the
+  cable does not ground the ID pin, add `dtoverlay=dwc2,dr_mode=host` to
+  `/boot/firmware/config.txt` and reboot.
 
-Brum: kombo je přístroj třídy I (ochranné uzemnění). USB kabel spojí zem Pi se zemí komba.
-Pomáhá krátký stíněný kabel, kvalitní zdroj ve stejné rozbočovací zásuvce jako kombo, feritový
-kroužek u komba. Pi a anténu drž dál od INPUT jacku a kytarového kabelu.
+Hum: the amp is a class I device (protective earth). The USB cable joins the Pi's ground to the
+amp's ground. A short shielded cable, a good power supply on the same power strip as the amp and a
+ferrite ring at the amp help. Keep the Pi and its antenna away from the INPUT jack and the guitar
+cable.
 
-## Umístění
+## Placement
 
-Kombo VT100X má uzavřenou basreflexovou skříň, elektroniku (síťový zdroj, DSP, 100W
-koncový stupeň, elektronka) v horním šasi s větracími otvory v zadním plechu a USB zásuvku
-na horním panelu.
+The VT100X has a closed bass-reflex cabinet, the electronics (mains supply, DSP, 100 W power amp,
+tube) in the top chassis with vents in the rear plate, and the USB socket on the top panel.
 
-- **Doporučení: Pi v malé větrané plastové krabičce na vnější zadní nebo boční stěně skříně**,
-  ve spodní polovině, připevněné odnímatelným suchým zipem (bez šroubů do skříně). Kov
-  krabičky by tlumil Wi-Fi.
-- Nejméně ~10 cm od zadního plechu šasi a jeho větracích otvorů; nic na otvory neopírej.
-- Kabel k horní USB zásuvce veď přes horní zadní hranu, mimo INPUT jack a síťový kabel.
-  Micro-USB konektor u Pi odlehči (úhlový konektor, příchytka), skříň vibruje.
-- Uvnitř skříně jen tehdy, když jde zadní stěna sundat šrouby, a jen v reproduktorovém
-  prostoru, na dno nebo spodní boční stěnu, dál od šasi, reproduktoru, magnetu a basreflexového
-  otvoru, na pěnových podložkách proti drnčení. Kombo předtím odpoj ze sítě. Průchod kabelů
-  vyžaduje otvor s průchodkou (zásah do skříně, riziko záruky). Před zavřením ověř signál Wi-Fi.
-- **Nikdy nezasahuj do síťové, elektronkové ani zesilovací části a nenapájej Pi z vnitřního
-  zdroje komba.** Takovou změnu musí posoudit servis podle schématu.
-- Pi Zero 2 W škrtí výkon od 80 °C. Na otevřeném vzduchu běží kolem 43 °C. Teplotu zjistíš
+- **Recommended: the Pi in a small vented plastic box on the outside of the cabinet's back or side
+  wall**, in the lower half, attached with removable hook-and-loop tape (no screws into the
+  cabinet). A metal box would dampen the Wi-Fi.
+- At least ~10 cm from the chassis' rear plate and its vents; do not lean anything against the vents.
+- Run the cable to the top USB socket over the top rear edge, away from the INPUT jack and the
+  mains cable. Relieve strain on the micro-USB plug at the Pi (angled plug, clip): the cabinet
+  vibrates.
+- Inside the cabinet only if the back panel comes off with screws, and only in the speaker
+  compartment, on the floor or the lower side wall, away from the chassis, the speaker, its magnet
+  and the bass-reflex port, on foam pads against rattling. Unplug the amp from the mains first.
+  Routing the cables needs a hole with a grommet (a change to the cabinet, warranty risk). Check the
+  Wi-Fi signal before closing it.
+- **Never touch the mains, tube or power amp sections, and never power the Pi from the amp's
+  internal supply.** Such a change must be judged by a service technician with the schematic.
+- The Pi Zero 2 W throttles from 80 °C. In open air it runs around 43 °C. Check the temperature with
   `vcgencmd measure_temp`.
 
-## Adresy a přístupové údaje
+## Addresses and credentials
 
-| Co | Hodnota |
+| What | Value |
 |---|---|
-| Web (domácí síť) | `http://velvetronix.local/`, `http://vox.local/`, nebo IP adresa (zobrazuje se v hlavičce webu) |
-| Web (hotspot) | Wi-Fi `VOX-Velvetronix`, pak `http://10.42.0.1/` |
-| Heslo do webu | `WEB_PASSWORD` v `secrets/velvetronix.env` na Macu (vygenerováno instalátorem, mimo Git) |
-| Heslo hotspotu | `AP_PSK` ve stejném souboru |
-| SSH | `ssh velvetronix@velvetronix.local` (klíč z Macu) |
+| Web (home network) | `http://velvetronix.local/`, `http://vox.local/`, or the IP address (shown on the Info tab) |
+| Web (hotspot) | Wi-Fi `VOX-Velvetronix`, then `http://10.42.0.1/` |
+| Web password | `WEB_PASSWORD` in `secrets/velvetronix.env` on the build machine (generated by the installer, not in Git) |
+| Hotspot password | `AP_PSK` in the same file |
+| SSH | `ssh velvetronix@velvetronix.local` (key from the build machine) |
 
-Pi Zero 2 W umí jen **2,4 GHz** Wi-Fi.
+The Pi Zero 2 W supports **2.4 GHz** Wi-Fi only.
 
-## Sestavení
+## Building
 
-Na Macu (Apple Silicon), potřeba: Go (verzi 1.26.9 si stáhne samo podle `go.mod`), Node 24,
-npm. Závislosti jsou připnuté v `go.mod`/`go.sum` a `web/package-lock.json`.
+On a Mac (Apple Silicon), you need Go (it fetches version 1.26.9 by itself from `go.mod`), Node 24
+and npm. Dependencies are pinned in `go.mod`/`go.sum` and `web/package-lock.json`.
 
 ```sh
-scripts/test.sh                    # web testy + build, go vet, go test, cross build
-scripts/build.sh                   # web -> internal/web/dist/index.html.gz, Go -> dist/ (linux/arm64, statické)
-scripts/release.sh                 # dist/*.tar.gz, deterministické
-scripts/test-deploy.sh             # testy instalačních skriptů v Debian kontejneru (docker)
-(cd web && npm run preview)        # náhled UI v prohlížeči se simulovaným kombem (bez hardwaru)
+scripts/test.sh                    # web tests + build, go vet, go test, cross build
+scripts/build.sh                   # web -> internal/web/dist/, Go -> dist/ (linux/arm64, static)
+scripts/release.sh                 # dist/*.tar.gz, deterministic
+scripts/test-deploy.sh             # tests of the install scripts in a Debian container (docker)
+(cd web && npm run preview)        # preview of the UI in a browser with a simulated amp (no hardware)
+(cd web && node scripts/vtx-presets.mjs)   # regenerate the Tone Room presets from web/research/vtxprog/
 ```
 
-Verze je v souboru `VERSION` (nebo proměnná `VERSION=0.2.0`). Výstupy:
+The version is in the `VERSION` file (or the variable `VERSION=0.2.0`). Outputs:
 
-| Soubor | Použití |
+| File | Use |
 |---|---|
-| `dist/pi-velvetronix-<ver>-linux-arm64.tar.gz` | **aktualizace přes web** (jen `manifest.json` + binárka) |
-| `dist/pi-velvetronix-install-<ver>.tar.gz` | **první instalace / reinstalace přes SSH** (binárka, systemd jednotky, root skripty, polkit) |
+| `dist/pi-velvetronix-<ver>-linux-arm64.tar.gz` | **update over the web** (only `manifest.json` + the binary) |
+| `dist/pi-velvetronix-install-<ver>.tar.gz` | **first install / reinstall over SSH** (binary, systemd units, root scripts, polkit) |
 
-## První instalace
+## First install
 
-1. Raspberry Pi Imager: Raspberry Pi OS Lite (64-bit), hostname `velvetronix`, uživatel
-   `velvetronix`, Wi-Fi domácí sítě (2,4 GHz), země CZ, SSH zapnuté. Vlož kartu a zapni Pi.
-2. Na Macu jednou nahraj SSH klíč: `ssh-copy-id velvetronix@velvetronix.local`.
-3. `scripts/install.sh` (výchozí cíl `velvetronix@velvetronix.local`). Skript:
-   - vygeneruje `secrets/velvetronix.env` (pokud chybí; práva 600, mimo Git),
-   - sestaví a zabalí release, nakopíruje ho na Pi a jako root spustí `deploy/install-remote.sh`,
-   - tajemství posílá jen přes stdin SSH, nikdy na příkazové řádce ani do logu,
-   - vytvoří systémového uživatele `pi-velvetronix`, systemd jednotky, polkit pravidlo,
-     hotspot `vox-ap`, zram swap, vypne PipeWire (bezhlavé zařízení, mohl by zabrat MIDI port).
-4. Otevři `http://velvetronix.local/` a přihlas se heslem `WEB_PASSWORD`.
+1. Raspberry Pi Imager: Raspberry Pi OS Lite (64-bit), hostname `velvetronix`, user `velvetronix`,
+   the home Wi-Fi (2.4 GHz), your country, SSH enabled. Insert the card and power on the Pi.
+2. Upload your SSH key once: `ssh-copy-id velvetronix@velvetronix.local`.
+3. `scripts/install.sh` (default target `velvetronix@velvetronix.local`). The script:
+   - generates `secrets/velvetronix.env` if missing (mode 600, not in Git),
+   - builds and packs a release, copies it to the Pi and runs `deploy/install-remote.sh` as root,
+   - sends the secrets only through SSH stdin, never on a command line or into a log,
+   - creates the system user `pi-velvetronix`, systemd units, the polkit rule, the `vox-ap`
+     hotspot and zram swap, and disables PipeWire (a headless device; it could grab the MIDI port).
+4. Open `http://velvetronix.local/` and log in with `WEB_PASSWORD`.
 
-Instalaci jde kdykoli zopakovat (je idempotentní); zachová Wi-Fi sítě i tajemství.
+The install can be repeated at any time (it is idempotent); it keeps the Wi-Fi networks and secrets.
 
 ## Wi-Fi
 
-- Pi se připojuje do uložených domácích sítí (NetworkManager, opakuje se donekonečna).
-- Když domácí síť není dostupná víc než 90 s, spustí se hotspot `VOX-Velvetronix`
-  (WPA2, `10.42.0.1`). V režimu hotspotu Pi pravidelně hledá uložené sítě a vrátí se, jakmile
-  některou uvidí a nikdo hotspot 5 minut nepoužívá.
-- Stránka **Wi-Fi**: seznam sítí, připojení k nové síti (SSID + heslo), zapomenutí uložené sítě,
-  ruční spuštění hotspotu na N minut.
-- Neúspěšné připojení nikdy nemaže uloženou konfiguraci. Mazat jde jen tlačítkem Zapomenout.
+- The Pi connects to the saved home networks (NetworkManager, retrying forever).
+- When no home network is available for more than 90 s, the `VOX-Velvetronix` hotspot starts
+  (WPA2, `10.42.0.1`). In hotspot mode the Pi keeps looking for saved networks and returns as soon
+  as it sees one and nobody has used the hotspot for 5 minutes.
+- The **Wi-Fi** tab: list of networks, connecting to a new network (SSID + password), forgetting a
+  saved network, starting the hotspot by hand for N minutes.
+- A failed connection never deletes a saved configuration. Only the Forget button deletes.
 
-## Aktualizace firmwaru (přes web)
+## Firmware updates (over the web)
 
 1. `VERSION=0.2.0 scripts/build.sh && VERSION=0.2.0 scripts/release.sh`
-2. Web → **Aktualizace firmwaru** → vyber `dist/pi-velvetronix-0.2.0-linux-arm64.tar.gz` → Nahrát.
-   (Nebo z Macu `scripts/dev-update.sh velvetronix.local dist/...tar.gz`.)
-3. Daemon balík zkontroluje (gzip, tar se dvěma soubory, název, architektura `linux/arm64`,
-   verze, sha256, ELF aarch64, velikost max. 40 MiB) a odmítne cokoli jiného, např. obraz SD
-   karty (`.img`, `.xz`), zip, holou binárku nebo balík pro jinou architekturu.
-4. Během instalace se pozastaví ovládací příkazy. Root updater balík znovu ověří, nainstaluje
-   do `/opt/pi-velvetronix/releases/<ver>/`, atomicky přepne symlink `current` a restartuje
-   službu. Web ukáže průběh a výsledek a sám se znovu připojí.
-5. Nová verze se potvrdí až po vlastní kontrole (HTTP na `127.0.0.1`), nezávisle na kombu
-   i domácí Wi-Fi. Když se třikrát nepotvrdí (pád, zaseknutí, timeout 60 s), `boot-guard`
-   vrátí předchozí verzi. Výsledek je vidět na stránce aktualizace.
+2. Web → **Aktualizace firmwaru** (firmware update) → pick
+   `dist/pi-velvetronix-0.2.0-linux-arm64.tar.gz` → upload. (Or from the build machine:
+   `scripts/dev-update.sh velvetronix.local dist/...tar.gz`.)
+3. The daemon checks the package (gzip, a tar with two files, name, architecture `linux/arm64`,
+   version, sha256, ELF aarch64, at most 40 MiB) and rejects anything else, such as an SD card image
+   (`.img`, `.xz`), a zip, a bare binary or a package for another architecture.
+4. Control commands are paused during the install. The root updater checks the package again,
+   installs it into `/opt/pi-velvetronix/releases/<ver>/`, atomically switches the `current`
+   symlink and restarts the service. The web shows progress and the result and reconnects by itself.
+5. The new version is confirmed only after its own check (HTTP on `127.0.0.1`), independent of the
+   amp and the home Wi-Fi. If it fails to confirm three times (crash, hang, 60 s timeout),
+   `boot-guard` returns to the previous version. The result is shown on the update page.
 
-Web aktualizuje jen aplikaci (a s ní i web, který je v binárce). Systemd jednotky, root skripty
-a polkit se mění jen `scripts/install.sh`. Každá nová verze musí zůstat kompatibilní
-s nainstalovanými root skripty, jinak ji nasaď přes `scripts/install.sh`.
+The web update replaces only the application (and the web UI built into the binary). Systemd units,
+root scripts and polkit change only with `scripts/install.sh`. Every new version must stay
+compatible with the installed root scripts; otherwise deploy it with `scripts/install.sh`.
 
-## Obnova
+## Recovery
 
-| Situace | Postup |
+| Situation | What to do |
 |---|---|
-| Web nefunguje, SSH ano | `scripts/install.sh` znovu nainstaluje aktuální verzi |
-| Nedostupná domácí síť | připoj se k hotspotu `VOX-Velvetronix`, `http://10.42.0.1/`, nastav Wi-Fi |
-| Nic nefunguje | vyndej microSD kartu, nahraj systém Raspberry Pi Imagerem znovu a proveď „První instalace“. Pi Zero nemá tlačítka BOOT/RESET; obnova je vždy přes SD kartu |
-| Zapomenuté heslo webu | `scripts/install.sh` znovu nastaví heslo ze `secrets/velvetronix.env` (nebo smaž soubor a vygeneruje se nové) |
+| Web down, SSH works | `scripts/install.sh` reinstalls the current version |
+| Home network unavailable | join the `VOX-Velvetronix` hotspot, open `http://10.42.0.1/`, set up Wi-Fi |
+| Nothing works | take out the microSD card, flash the system again with Raspberry Pi Imager and do the "First install". The Pi Zero has no BOOT/RESET buttons; recovery is always through the SD card |
+| Forgotten web password | `scripts/install.sh` sets the password from `secrets/velvetronix.env` again (or delete the file and a new one is generated) |
 
-Logy: `ssh velvetronix@velvetronix.local sudo journalctl -u pi-velvetronix -u pi-velvetronix-updater -b`.
-Hesla, PSK ani session tokeny se nikdy nelogují.
+Logs: `ssh velvetronix@velvetronix.local sudo journalctl -u pi-velvetronix -u pi-velvetronix-updater -b`.
+Passwords, PSKs and session tokens are never logged.
 
-## Test s kombem
+## Testing with the amp
 
-Kombo VT100X je ověřené (viz [docs/testing.md](docs/testing.md)). Postup, kdyby ho Pi nenašlo:
+The VT100X has been verified (see [docs/testing.md](docs/testing.md)). If the Pi does not find it:
 
-1. Zapoj Pi podle schématu výše, zapni kombo.
-2. Web: hlavička má ukázat **Kombo (USB) připojeno** (až po odpovědi komba na Device Inquiry).
-   Bez komba ukazuje „odpojeno“.
-3. Kontrola na Pi (služba drží MIDI port výhradně, proto ji na chvíli zastav):
+1. Wire the Pi as shown above and power on the amp.
+2. Web: the status dot for **Kombo (USB)** should be green (only after the amp answers the Device
+   Inquiry). Without the amp it reports "odpojeno" (disconnected).
+3. Check on the Pi (the service holds the MIDI port exclusively, so stop it for a moment):
 
    ```sh
    ssh velvetronix@velvetronix.local
-   lsusb                                    # čekáme 0944:xxxx (KORG)
-   cat /proc/asound/cards; amidi -l         # název "Valvetronix X" nebo podobný
+   lsusb                                    # expect 0944:xxxx (KORG)
+   cat /proc/asound/cards; amidi -l         # name "Valvetronix X" or similar
    sudo systemctl stop pi-velvetronix
-   amidi -p hw:1,0,0 -S "F0 7E 7F 06 01 F7" -d -t 2        # identita, čekáme ... 42 34 01 ...
-   amidi -p hw:1,0,0 -S "F0 42 30 00 01 34 12 F7" -d -t 2  # režim, čekáme F0 42 30 00 01 34 42 ...
+   amidi -p hw:1,0,0 -S "F0 7E 7F 06 01 F7" -d -t 2        # identity, expect ... 42 34 01 ...
+   amidi -p hw:1,0,0 -S "F0 42 30 00 01 34 12 F7" -d -t 2  # mode, expect F0 42 30 00 01 34 42 ...
    sudo systemctl start pi-velvetronix
    ```
 
-4. Pokud se karta jmenuje jinak a web ukazuje „odpojeno“, pošli výstup `cat /proc/asound/cards`.
-   Výběr zařízení řídí parametr `--midi-match` (výchozí `Valvetronix`).
+4. If the card has a different name and the web reports "odpojeno", send the output of
+   `cat /proc/asound/cards`. The device is chosen by the `--midi-match` flag (default `Valvetronix`).
 
-## Omezení
+## Limitations
 
-- Se skutečným VT100X je ověřené připojení, ovládání, ukládání do slotu se zpětným přečtením
-  a sdílené ovládání z více oken. Přežití uložených programů po vypnutí komba a změny z knobů
-  přímo na kombu zatím ověřené nejsou. Viz [docs/testing.md](docs/testing.md).
-- Import/export VTXPROG zatím není (zadání: až po spolehlivém základu).
-- Web běží přes HTTP v lokální síti; heslo putuje v síti nešifrovaně.
-- Polkit pravidlo povoluje NetworkManager akce uživateli `pi-velvetronix` (kontrola podle
-  systemd jednotky na polkitd 126 nefunguje).
+- With a real VT100X, connecting, control, saving to a slot with read-back and shared control from
+  several windows are verified. Whether saved programs survive switching the amp off, and changes
+  made with the knobs on the amp itself, are not verified yet. See [docs/testing.md](docs/testing.md).
+- `.vtxprog` files can be loaded and played; exporting to `.vtxprog` is not available yet.
+- The web runs over HTTP on the local network; the password travels unencrypted.
+- The polkit rule allows NetworkManager actions for the user `pi-velvetronix` (a check by systemd
+  unit does not work on polkitd 126).
 
 ## Licence
 
-[MIT](LICENSE). Popis protokolu a tabulky vycházejí z oficiální VOX „Valvetronix X MIDI
-Implementation v1.0“ a z projektu [vox-amp-librarian](https://github.com/tmarsteel/vox-amp-librarian)
-(MIT, Copyright (c) 2023 Tobias Marstaller); kód z něj převzatý není. VOX, Valvetronix a názvy
-napodobovaných zesilovačů a efektů jsou ochranné známky svých vlastníků a slouží jen
-k identifikaci zvuků. Projekt není spojený s VOX Amplification ani KORG.
+[MIT](LICENSE). The protocol description and tables are based on the official VOX "Valvetronix X
+MIDI Implementation v1.0" and on the [vox-amp-librarian](https://github.com/tmarsteel/vox-amp-librarian)
+project (MIT, Copyright (c) 2023 Tobias Marstaller); no code was taken from it. The Tone Room
+presets in `web/research/vtxprog/marcosmoura/` are by Marcos Moura under the Beerware licence (see
+the `LICENSE` file there). VOX, Valvetronix and the names of the modelled amps and effects are
+trademarks of their owners and are used only to identify sounds. The project is not affiliated
+with VOX Amplification or KORG.

@@ -2365,11 +2365,11 @@
     "artist": "The White Stripes",
     "year": 2003,
     "genre": "rock",
-    "description_cs": "Jack White: archtop Kay s jedním snímačem u krku, DigiTech Whammy o oktávu dolů a za ním Big Muff do komba Silvertone 1485. FUZZ s vysokým drive do TWEED 4x10 NORMAL. Kombo nemá oktávový efekt, takže riff zní o oktávu výš než na desce; pomůže krkový snímač a ubraný tón na kytaře.",
+    "description_cs": "Jack White: archtop Kay s jedním snímačem u krku, DigiTech Whammy o oktávu dolů a za ním Big Muff do komba Silvertone 1485. FUZZ s vysokým drive do TWEED 4x10 NORMAL; nastavení zesilovače leží v rozmezí odhadů z Guitar World, TonesMatch, ToneMirror a Guitar Chalk (gain 4–6, středy 5–6, výšky 6,5–7). Kombo nemá oktávový efekt, takže riff zní o oktávu výš než na desce; pomůže krkový snímač a ubraný tón na kytaře.",
     "source": "https://www.guitarworld.com/gear/secrets-behind-jack-white-guitar-sound-white-stripes-seven-nation-army",
     "amp": {
       "model": 3,
-      "gain": 45,
+      "gain": 50,
       "treble": 65,
       "middle": 55,
       "bass": 60,
