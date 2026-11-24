@@ -1,0 +1,1061 @@
+{
+ "ampModels": [
+  {
+   "id": 0,
+   "name": "DELUXE CL VIBRATO",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 1,
+   "name": "DELUXE CL NORMAL",
+   "brightCap": false,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 2,
+   "name": "TWEED 4x10 BRIGHT",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 3,
+   "name": "TWEED 4x10 NORMAL",
+   "brightCap": false,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 4,
+   "name": "BOUTIQUE CL",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 5,
+   "name": "BOUTIQUE OD",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 6,
+   "name": "VOX AC30",
+   "brightCap": true,
+   "toneLabel": "TONE"
+  },
+  {
+   "id": 7,
+   "name": "VOX AC30TB",
+   "brightCap": true,
+   "toneLabel": "TONE"
+  },
+  {
+   "id": 8,
+   "name": "BRIT 1959 TREBLE",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 9,
+   "name": "BRIT 1959 NORMAL",
+   "brightCap": false,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 10,
+   "name": "BRIT 800",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 11,
+   "name": "BRIT VM",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 12,
+   "name": "SL-OD",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 13,
+   "name": "DOUBLE REC",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 14,
+   "name": "CALI ELATION",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 15,
+   "name": "ERUPT III CH2",
+   "brightCap": false,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 16,
+   "name": "ERUPT III CH3",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 17,
+   "name": "BOUTIQUE METAL",
+   "brightCap": false,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 18,
+   "name": "BRIT OR MKII",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  },
+  {
+   "id": 19,
+   "name": "ORIGINAL CL",
+   "brightCap": true,
+   "toneLabel": "PRESENCE"
+  }
+ ],
+ "ampParams": [
+  {
+   "index": 0,
+   "name": "GAIN",
+   "kind": "knob",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "index": 1,
+   "name": "TREBLE",
+   "kind": "knob",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "index": 2,
+   "name": "MIDDLE",
+   "kind": "knob",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "index": 3,
+   "name": "BASS",
+   "kind": "knob",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "index": 4,
+   "name": "VOLUME",
+   "kind": "knob",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "index": 5,
+   "name": "PRESENCE",
+   "kind": "knob",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "index": 6,
+   "name": "RESONANCE",
+   "kind": "knob",
+   "min": 0,
+   "max": 100
+  },
+  {
+   "index": 7,
+   "name": "BRIGHT CAP",
+   "kind": "switch",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "index": 8,
+   "name": "LOW CUT",
+   "kind": "switch",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "index": 9,
+   "name": "MID BOOST",
+   "kind": "switch",
+   "min": 0,
+   "max": 1
+  },
+  {
+   "index": 10,
+   "name": "BIAS SHIFT",
+   "kind": "bias",
+   "min": 0,
+   "max": 2
+  },
+  {
+   "index": 11,
+   "name": "CLASS",
+   "kind": "class",
+   "min": 0,
+   "max": 1
+  }
+ ],
+ "pedal1Types": [
+  {
+   "id": 0,
+   "name": "COMP"
+  },
+  {
+   "id": 1,
+   "name": "CHORUS"
+  },
+  {
+   "id": 2,
+   "name": "TUBE OD"
+  },
+  {
+   "id": 3,
+   "name": "GOLD DRIVE"
+  },
+  {
+   "id": 4,
+   "name": "TREBLE BOOST"
+  },
+  {
+   "id": 5,
+   "name": "RC TURBO"
+  },
+  {
+   "id": 6,
+   "name": "ORANGE DIST"
+  },
+  {
+   "id": 7,
+   "name": "FAT DIST"
+  },
+  {
+   "id": 8,
+   "name": "BRIT LEAD"
+  },
+  {
+   "id": 9,
+   "name": "FUZZ"
+  }
+ ],
+ "pedal2Types": [
+  {
+   "id": 0,
+   "name": "FLANGER"
+  },
+  {
+   "id": 1,
+   "name": "BLACK PHASER"
+  },
+  {
+   "id": 2,
+   "name": "ORANGE PHASER 1"
+  },
+  {
+   "id": 3,
+   "name": "ORANGE PHASER 2"
+  },
+  {
+   "id": 4,
+   "name": "TREMOLO"
+  },
+  {
+   "id": 5,
+   "name": "TAPE ECHO"
+  },
+  {
+   "id": 6,
+   "name": "ANALOG DELAY"
+  }
+ ],
+ "reverbTypes": [
+  {
+   "id": 0,
+   "name": "ROOM"
+  },
+  {
+   "id": 1,
+   "name": "SPRING"
+  },
+  {
+   "id": 2,
+   "name": "HALL"
+  },
+  {
+   "id": 3,
+   "name": "PLATE"
+  }
+ ],
+ "effectParams": {
+  "pedal1": [
+   [
+    {
+     "name": "SENS",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "LEVEL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "ATTACK",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "VOICE",
+     "unit": "voice",
+     "min": 0,
+     "max": 2
+    },
+    null,
+    null
+   ],
+   [
+    {
+     "name": "SPEED",
+     "unit": "mHz",
+     "min": 100,
+     "max": 10000
+    },
+    {
+     "name": "DEPTH",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MANUAL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MIX",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "LOW CUT",
+     "unit": "bool",
+     "min": 0,
+     "max": 1
+    },
+    {
+     "name": "HIGH CUT",
+     "unit": "bool",
+     "min": 0,
+     "max": 1
+    }
+   ],
+   [
+    {
+     "name": "DRIVE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TONE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "LEVEL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TREBLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MIDDLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "BASS",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ],
+   [
+    {
+     "name": "DRIVE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TONE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "LEVEL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TREBLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MIDDLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "BASS",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ],
+   [
+    {
+     "name": "DRIVE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TONE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "LEVEL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TREBLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MIDDLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "BASS",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ],
+   [
+    {
+     "name": "DRIVE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TONE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "LEVEL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TREBLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MIDDLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "BASS",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ],
+   [
+    {
+     "name": "DRIVE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TONE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "LEVEL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TREBLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MIDDLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "BASS",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ],
+   [
+    {
+     "name": "DRIVE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TONE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "LEVEL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TREBLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MIDDLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "BASS",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ],
+   [
+    {
+     "name": "DRIVE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TONE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "LEVEL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TREBLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MIDDLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "BASS",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ],
+   [
+    {
+     "name": "DRIVE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TONE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "LEVEL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TREBLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MIDDLE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "BASS",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ]
+  ],
+  "pedal2": [
+   [
+    {
+     "name": "SPEED",
+     "unit": "mHz",
+     "min": 100,
+     "max": 5000
+    },
+    {
+     "name": "DEPTH",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MANUAL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "LOW CUT",
+     "unit": "bool",
+     "min": 0,
+     "max": 1
+    },
+    {
+     "name": "HIGH CUT",
+     "unit": "bool",
+     "min": 0,
+     "max": 1
+    },
+    {
+     "name": "RESONANCE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ],
+   [
+    {
+     "name": "SPEED",
+     "unit": "mHz",
+     "min": 100,
+     "max": 10000
+    },
+    {
+     "name": "RESONANCE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MANUAL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "DEPTH",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    null,
+    null
+   ],
+   [
+    {
+     "name": "SPEED",
+     "unit": "mHz",
+     "min": 100,
+     "max": 10000
+    },
+    {
+     "name": "RESONANCE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MANUAL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "DEPTH",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    null,
+    null
+   ],
+   [
+    {
+     "name": "SPEED",
+     "unit": "mHz",
+     "min": 100,
+     "max": 10000
+    },
+    {
+     "name": "RESONANCE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MANUAL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "DEPTH",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    null,
+    null
+   ],
+   [
+    {
+     "name": "SPEED",
+     "unit": "mHz",
+     "min": 1650,
+     "max": 10000
+    },
+    {
+     "name": "DEPTH",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "DUTY",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "SHAPE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "LEVEL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    null
+   ],
+   [
+    {
+     "name": "TIME",
+     "unit": "ms",
+     "min": 30,
+     "max": 1200
+    },
+    {
+     "name": "LEVEL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "FEEDBACK",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TONE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MOD SPEED",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MOD DEPTH",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ],
+   [
+    {
+     "name": "TIME",
+     "unit": "ms",
+     "min": 30,
+     "max": 1200
+    },
+    {
+     "name": "LEVEL",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "FEEDBACK",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TONE",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MOD SPEED",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "MOD DEPTH",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ]
+  ],
+  "reverb": [
+   [
+    {
+     "name": "MIX",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TIME",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "PRE DELAY",
+     "unit": "ms",
+     "min": 0,
+     "max": 70
+    },
+    {
+     "name": "LOW DAMP",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "HIGH DAMP",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ],
+   [
+    {
+     "name": "MIX",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TIME",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "PRE DELAY",
+     "unit": "ms",
+     "min": 0,
+     "max": 70
+    },
+    {
+     "name": "LOW DAMP",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "HIGH DAMP",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ],
+   [
+    {
+     "name": "MIX",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TIME",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "PRE DELAY",
+     "unit": "ms",
+     "min": 0,
+     "max": 70
+    },
+    {
+     "name": "LOW DAMP",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "HIGH DAMP",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ],
+   [
+    {
+     "name": "MIX",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "TIME",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "PRE DELAY",
+     "unit": "ms",
+     "min": 0,
+     "max": 70
+    },
+    {
+     "name": "LOW DAMP",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    },
+    {
+     "name": "HIGH DAMP",
+     "unit": "0-100",
+     "min": 0,
+     "max": 100
+    }
+   ]
+  ]
+ },
+ "biasNames": [
+  "OFF",
+  "COLD",
+  "HOT"
+ ],
+ "classNames": [
+  "A",
+  "A/B"
+ ],
+ "modeNames": [
+  "user",
+  "preset",
+  "manual"
+ ],
+ "userSlotNames": [
+  "A1",
+  "A2",
+  "A3",
+  "A4",
+  "B1",
+  "B2",
+  "B3",
+  "B4"
+ ]
+}

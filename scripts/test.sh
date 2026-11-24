@@ -5,7 +5,7 @@ set -eu
 root=$(cd "$(dirname "$0")/.." && pwd)
 cd "$root"
 
-(cd web && npm ci && npm test && npm run build)
+(cd web && npm ci && npm test && npm run build && node scripts/go-data.mjs --check)
 go vet ./...
 go test ./...
 scripts/build.sh --skip-web

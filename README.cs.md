@@ -30,7 +30,7 @@ aplikace VOX Tone Room.
 - **Ukládání do kanálů.** Zvuk jde uložit pod vlastním jménem (max. 16 znaků) do A1–B4. Kombo
   zápis potvrdí a aplikace ho ověří zpětným přečtením.
 - **Víc ovladačů najednou, všechno živě.** Kombo může současně ovládat až 8 oken: tablet,
-  telefon, další záložka nebo MCP server pro Clauda (`mcp/`). Každé okno hned vidí, co změnila
+  telefon, další záložka nebo Claude přes MCP endpoint `/mcp`. Každé okno hned vidí, co změnila
   ostatní, i co se otočí přímo na kombu.
 - **Aplikace na ploše iPadu.** V Safari Sdílet → Přidat na plochu: vlastní ikona, celá obrazovka
   bez lišt Safari (viz [Instalace na plochu](#instalace-na-plochu-ipadu-nebo-telefonu)).
@@ -60,14 +60,15 @@ Obrázky jsou z náhledu se simulovaným kombem (`cd web && npm run preview`).
 ```
 tablet / telefon / Claude ──Wi-Fi── Pi Zero 2 W ──USB (OTG)── VOX VT100X
   web + protokol VOX             Go daemon:                  zvuk, programy
-  (TypeScript), MCP server       WebSocket ↔ ALSA rawmidi
+  (TypeScript)                   WebSocket ↔ ALSA rawmidi, MCP
                                  fronta povelů, rozesílání,
                                  přihlášení, Wi-Fi, mDNS,
                                  aktualizace s rollbackem
 ```
 
-- Protokol VOXu běží v prohlížeči (`web/src/protocol/`), stejný kód používá MCP server. Pi předává
-  celé SysEx zprávy a kontroluje je.
+- Protokol VOXu běží v prohlížeči (`web/src/protocol/`). Pi předává celé SysEx zprávy
+  a kontroluje je. Pro MCP endpoint má daemon port protokolu do Go (`internal/voxproto/`).
+  Testuje se proti vektorům vygenerovaným z kódu v TypeScriptu.
 - Každé okno je s Pi spojené přes WebSocket `/ws`. Daemon povely od všech oken posílá kombu po
   jednom a odpověď vrátí odesílateli. Kombo totiž odpovídá jen „OK“ a neříká komu. Změnu, kterou
   kombo potvrdí, daemon rozešle ostatním oknům. Změny z knobů na kombu dostanou všechna okna.
@@ -86,11 +87,34 @@ Aplikace na ploše má vlastní přihlášení, odděleně od Safari, takže se 
 Přihlášení vydrží 30 dní. Bez spojení s Pi aplikace nefunguje: web běží přes HTTP v lokální síti,
 a v takovém prostředí prohlížeče nedovolí offline režim (service worker).
 
-## MCP server pro Clauda
+## MCP endpoint pro Clauda
 
-`mcp/` obsahuje MCP server, přes který může Claude kombo číst a nastavovat: stav, živé nastavení
-zvuku, písničky, přepnutí a uložení programu. Otevřené stránky vidí jeho změny živě. Sestavení
-a registrace jsou v [mcp/README.cs.md](mcp/README.cs.md).
+Pi má MCP endpoint na adrese `http://velvetronix.local/mcp`. Přes něj může Claude (nebo jiný MCP
+klient) kombo číst a nastavovat: stav, živé nastavení zvuku, písničky a presety Tone Room, soubory
+`.vtxprog`, přepnutí a uložení programu. Otevřené stránky vidí jeho změny živě. Do paměti komba
+zapisuje jen `vox_save_program`. Všechno ostatní mění jen živý zvuk.
+
+1. Získejte token. Nový token nahradí předchozí a zobrazí se jen jednou:
+
+   ```sh
+   curl -s -c /tmp/vox -H 'Content-Type: application/json' \
+     -d '{"password":"<heslo webu>"}' http://velvetronix.local/api/login
+   curl -s -b /tmp/vox -X POST http://velvetronix.local/api/mcp/token; rm /tmp/vox
+   ```
+
+2. Zaregistrujte endpoint, například v Claude Code:
+
+   ```sh
+   claude mcp add --scope user --transport http velvetronix http://velvetronix.local/mcp \
+     --header "Authorization: Bearer <token>"
+   ```
+
+Změna hesla webu token zruší. Podrobnosti jsou v [docs/design.md §7.1](docs/design.md).
+
+Mimo místní síť (konektory v claude.ai, aplikace Claude) je endpoint dostupný přes Cloudflare
+Tunnel na adrese `https://vox.kaln.cz/mcp/<token>`. Token je v cestě, protože konektory v claude.ai
+neumí poslat hlavičku. Ven je vystavená jen cesta `/mcp/<token>`. Nastavení je popsané
+v [deploy/tunnel/README.md](deploy/tunnel/README.md) (anglicky).
 
 ## Hardware a zapojení
 

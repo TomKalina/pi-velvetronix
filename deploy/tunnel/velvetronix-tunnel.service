@@ -1,0 +1,14 @@
+[Unit]
+Description=Cloudflare Tunnel vox.kaln.cz -> velvetronix.local/mcp (pi-velvetronix MCP)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+EnvironmentFile=%h/.config/velvetronix-tunnel/env
+ExecStart=%h/.local/bin/cloudflared --no-autoupdate tunnel run
+Restart=always
+RestartSec=10
+MemoryMax=150M
+
+[Install]
+WantedBy=default.target

@@ -1,9 +1,11 @@
-// Package auth stores the web password (bcrypt), login sessions and a per-IP login backoff.
+// Package auth stores the web password (bcrypt), login sessions, the MCP token and a per-IP
+// login backoff.
 package auth
 
 import (
 	"crypto/rand"
 	"crypto/sha256"
+	"crypto/subtle"
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
@@ -35,6 +37,7 @@ func (e ErrRateLimited) Error() string {
 const (
 	authFile     = "auth.json"
 	sessionsFile = "sessions.json"
+	mcpFile      = "mcp.json"
 
 	sessionTTL     = 30 * 24 * time.Hour
 	maxSessions    = 16
@@ -58,6 +61,12 @@ type session struct {
 	Exp  time.Time `json:"exp"`
 }
 
+// mcpToken is the stored MCP bearer token (design §7.1).
+type mcpToken struct {
+	Hash    string `json:"h"`
+	Created string `json:"created"`
+}
+
 type failures struct {
 	times    []time.Time
 	until    time.Time
@@ -75,6 +84,7 @@ type Store struct {
 	hash     []byte
 	authStat os.FileInfo
 	sessions []session
+	mcp      string // sha256 hex of the MCP token, "" = none
 	fails    map[string]*failures
 }
 
@@ -102,6 +112,11 @@ func Load(stateDir string) (*Store, error) {
 	if data, err := os.ReadFile(filepath.Join(stateDir, sessionsFile)); err == nil && s.hash != nil {
 		_ = json.Unmarshal(data, &s.sessions)
 	}
+	// Likewise a corrupt MCP token only disables MCP until a new one is made.
+	var t mcpToken
+	if data, err := os.ReadFile(filepath.Join(stateDir, mcpFile)); err == nil && s.hash != nil && json.Unmarshal(data, &t) == nil {
+		s.mcp = t.Hash
+	}
 	return s, nil
 }
 
@@ -125,7 +140,7 @@ func (s *Store) load() error {
 }
 
 // reloadIfChanged picks up a password set by `set-password` while the daemon runs; a
-// changed password invalidates every session. Caller holds s.mu.
+// changed password invalidates every session and the MCP token. Caller holds s.mu.
 func (s *Store) reloadIfChanged() {
 	if sameFile(statAuth(s.dir), s.authStat) {
 		return
@@ -133,6 +148,8 @@ func (s *Store) reloadIfChanged() {
 	_ = s.load() // on error hash stays nil: fail closed
 	s.sessions = nil
 	_ = s.saveSessions()
+	s.mcp = ""
+	_ = os.Remove(filepath.Join(s.dir, mcpFile))
 }
 
 // Configured reports whether a password is set.
@@ -274,6 +291,43 @@ func (s *Store) Logout(token string) {
 	}
 }
 
+// NewMCPToken makes a new MCP bearer token, replacing the old one. Only its sha256 is stored,
+// so the token is shown once.
+func (s *Store) NewMCPToken() (string, error) {
+	raw := make([]byte, 32)
+	if _, err := rand.Read(raw); err != nil {
+		return "", err
+	}
+	token := base64.RawURLEncoding.EncodeToString(raw)
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.reloadIfChanged()
+	if s.hash == nil {
+		return "", ErrNoPassword
+	}
+	data, err := json.Marshal(mcpToken{Hash: hashToken(token), Created: s.now().UTC().Format(time.RFC3339)})
+	if err != nil {
+		return "", err
+	}
+	if err := writeAtomic(filepath.Join(s.dir, mcpFile), data, 0o600); err != nil {
+		return "", err
+	}
+	s.mcp = hashToken(token)
+	return token, nil
+}
+
+// CheckMCP reports whether token is the MCP token.
+func (s *Store) CheckMCP(token string) bool {
+	if token == "" {
+		return false
+	}
+	h := hashToken(token)
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.reloadIfChanged()
+	return s.mcp != "" && subtle.ConstantTimeCompare([]byte(h), []byte(s.mcp)) == 1
+}
+
 func (s *Store) saveSessions() error {
 	list := s.sessions
 	if list == nil {
@@ -291,7 +345,7 @@ func hashToken(token string) string {
 	return hex.EncodeToString(sum[:])
 }
 
-// SetPassword writes a new password hash and invalidates all sessions.
+// SetPassword writes a new password hash and invalidates all sessions and the MCP token.
 func SetPassword(stateDir, password string) error {
 	if len(password) < minPasswordLen || len(password) > maxPasswordLen {
 		return ErrBadLength
@@ -301,6 +355,9 @@ func SetPassword(stateDir, password string) error {
 		return err
 	}
 	if err := writeAtomic(filepath.Join(stateDir, sessionsFile), []byte("[]"), 0o600); err != nil {
+		return err
+	}
+	if err := os.Remove(filepath.Join(stateDir, mcpFile)); err != nil && !errors.Is(err, fs.ErrNotExist) {
 		return err
 	}
 	data, err := json.Marshal(authData{Bcrypt: string(hash), Changed: time.Now().UTC().Format(time.RFC3339)})

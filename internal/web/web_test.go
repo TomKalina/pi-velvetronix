@@ -6,6 +6,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log/slog"
 	"net"
@@ -153,6 +154,8 @@ type fakeAuth struct {
 	configured bool
 	loginErr   error
 	tokens     map[string]bool
+	mcp        string
+	mcpN       int
 }
 
 func (f *fakeAuth) Configured() bool { return f.configured }
@@ -165,6 +168,12 @@ func (f *fakeAuth) Login(pw, ip string) (string, error) {
 }
 func (f *fakeAuth) Check(t string) bool { return f.tokens[t] }
 func (f *fakeAuth) Logout(t string)     { delete(f.tokens, t) }
+func (f *fakeAuth) NewMCPToken() (string, error) {
+	f.mcpN++
+	f.mcp = fmt.Sprintf("mcp-%d", f.mcpN)
+	return f.mcp, nil
+}
+func (f *fakeAuth) CheckMCP(t string) bool { return t != "" && t == f.mcp }
 
 type syncBuf struct {
 	mu sync.Mutex

@@ -163,6 +163,18 @@ func (s *Server) handleLogout(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, okBody)
 }
 
+// handleMCPToken makes a new MCP bearer token (the old one stops working) and shows it once.
+func (s *Server) handleMCPToken(w http.ResponseWriter, r *http.Request) {
+	token, err := s.Auth.NewMCPToken()
+	if err != nil {
+		s.Log.Warn("mcp token", "error", err)
+		writeError(w, http.StatusInternalServerError, "io_error", "")
+		return
+	}
+	s.Log.Info("mcp token created", "ip", remoteIP(r))
+	writeJSON(w, http.StatusOK, map[string]string{"token": token})
+}
+
 func (s *Server) handleStatus(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, s.status())
 }

@@ -273,3 +273,59 @@ func TestSetPasswordInvalidatesSessions(t *testing.T) {
 		t.Error("old session persisted")
 	}
 }
+
+func TestMCPToken(t *testing.T) {
+	dir, s, _ := setup(t)
+	if s.CheckMCP("") || s.CheckMCP("x") {
+		t.Fatal("token valid before one was made")
+	}
+	tok, err := s.NewMCPToken()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !s.CheckMCP(tok) || s.CheckMCP(tok+"x") || s.Check(tok) {
+		t.Fatal("token check")
+	}
+	data, _ := os.ReadFile(filepath.Join(dir, mcpFile))
+	if strings.Contains(string(data), tok) {
+		t.Fatal("token stored in clear")
+	}
+	if s2, _ := Load(dir); !s2.CheckMCP(tok) {
+		t.Fatal("token not persisted")
+	}
+	tok2, _ := s.NewMCPToken()
+	if s.CheckMCP(tok) || !s.CheckMCP(tok2) {
+		t.Fatal("old token valid after a new one was made")
+	}
+	if err := SetPassword(dir, "another password"); err != nil {
+		t.Fatal(err)
+	}
+	if s.CheckMCP(tok2) {
+		t.Fatal("token valid after password change")
+	}
+	if s2, _ := Load(dir); s2.CheckMCP(tok2) {
+		t.Fatal("token persisted after password change")
+	}
+}
+
+func TestMCPTokenUnconfigured(t *testing.T) {
+	s, err := Load(t.TempDir())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := s.NewMCPToken(); !errors.Is(err, ErrNoPassword) {
+		t.Fatalf("err %v", err)
+	}
+}
+
+func TestSetPasswordOfflineRemovesMCPToken(t *testing.T) {
+	dir, s, _ := setup(t)
+	tok, _ := s.NewMCPToken()
+	// Daemon stopped, password changed, daemon started again.
+	if err := SetPassword(dir, "another password"); err != nil {
+		t.Fatal(err)
+	}
+	if s2, _ := Load(dir); s2.CheckMCP(tok) {
+		t.Fatal("token valid after an offline password change")
+	}
+}

@@ -30,7 +30,7 @@ works on the local network without internet and without the VOX Tone Room app.
 - **Saving to channels.** A sound can be saved under its own name (up to 16 characters) to A1–B4.
   The amp confirms the write and the app verifies it by reading the slot back.
 - **Several controllers at once, all live.** Up to 8 windows can control the amp at the same time:
-  a tablet, a phone, another tab, or the MCP server for Claude (`mcp/`). Every window sees at once
+  a tablet, a phone, another tab, or Claude through the MCP endpoint `/mcp`. Every window sees at once
   what the others changed, and what was turned on the amp itself.
 - **Home-screen app on the iPad.** In Safari, Share → Add to Home Screen: its own icon, full screen
   without the Safari bars (see [Add to the home screen](#add-to-the-home-screen-of-an-ipad-or-phone)).
@@ -61,14 +61,15 @@ The screenshots come from the preview with a simulated amp (`cd web && npm run p
 ```
 tablet / phone / Claude ──Wi-Fi── Pi Zero 2 W ──USB (OTG)── VOX VT100X
   web + VOX protocol            Go daemon:                  sound, programs
-  (TypeScript), MCP server      WebSocket ↔ ALSA rawmidi
+  (TypeScript)                  WebSocket ↔ ALSA rawmidi, MCP
                                 command queue, forwarding,
                                 login, Wi-Fi, mDNS,
                                 updates with rollback
 ```
 
-- The VOX protocol runs in the browser (`web/src/protocol/`); the MCP server uses the same code.
-  The Pi passes whole SysEx messages through and checks them.
+- The VOX protocol runs in the browser (`web/src/protocol/`). The Pi passes whole SysEx messages
+  through and checks them. For the MCP endpoint the daemon has a Go port of the protocol
+  (`internal/voxproto/`), tested against vectors generated from the TypeScript code.
 - Every window is connected to the Pi through the WebSocket `/ws`. The daemon sends the commands
   from all windows to the amp one at a time and returns each reply to its sender, because the amp
   only answers "OK" and does not say to whom. Once the amp confirms a change, the daemon forwards
@@ -88,11 +89,34 @@ The home-screen app has its own login, separate from Safari, so log in once more
 lasts 30 days. The app does not work without a connection to the Pi: the web runs over HTTP on the
 local network, where browsers do not allow an offline mode (service worker).
 
-## MCP server for Claude
+## MCP endpoint for Claude
 
-`mcp/` holds an MCP server through which Claude can read and set the amp: status, live sound,
-songs and Tone Room presets, `.vtxprog` files, selecting and saving programs. Open pages see its
-changes live. Building and registering it is described in [mcp/README.md](mcp/README.md).
+The Pi serves an MCP endpoint at `http://velvetronix.local/mcp` through which Claude (or another
+MCP client) can read and set the amp: status, live sound, songs and Tone Room presets, `.vtxprog`
+files, selecting and saving programs. Open pages see its changes live. Only `vox_save_program`
+writes to the amp's memory; everything else changes the live sound.
+
+1. Get a token (it replaces the previous one and is shown only once):
+
+   ```sh
+   curl -s -c /tmp/vox -H 'Content-Type: application/json' \
+     -d '{"password":"<web password>"}' http://velvetronix.local/api/login
+   curl -s -b /tmp/vox -X POST http://velvetronix.local/api/mcp/token; rm /tmp/vox
+   ```
+
+2. Register it, e.g. in Claude Code:
+
+   ```sh
+   claude mcp add --scope user --transport http velvetronix http://velvetronix.local/mcp \
+     --header "Authorization: Bearer <token>"
+   ```
+
+Changing the web password revokes the token. Details: [docs/design.md §7.1](docs/design.md).
+
+From outside the local network (claude.ai connectors, the Claude apps) the endpoint is reachable
+through a Cloudflare Tunnel as `https://vox.kaln.cz/mcp/<token>`: the token is in the path because
+claude.ai connectors cannot send headers. Only `/mcp/<token>` is exposed. Setup:
+[deploy/tunnel/README.md](deploy/tunnel/README.md).
 
 ## Hardware and wiring
 

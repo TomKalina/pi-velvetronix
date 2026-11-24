@@ -1,4 +1,5 @@
-// Package web serves the UI, the JSON API (design §5) and the WebSocket bridge (§7).
+// Package web serves the UI, the JSON API (design §5), the WebSocket bridge (§7) and the MCP
+// endpoint (§7.1).
 package web
 
 import (
@@ -15,6 +16,7 @@ import (
 	"time"
 
 	"github.com/TomKalina/pi-velvetronix/internal/bridge"
+	"github.com/TomKalina/pi-velvetronix/internal/mcp"
 	"github.com/TomKalina/pi-velvetronix/internal/netmgr"
 	"github.com/TomKalina/pi-velvetronix/internal/update"
 )
@@ -37,6 +39,8 @@ type Auth interface {
 	Login(password, remoteIP string) (token string, err error)
 	Check(token string) bool
 	Logout(token string)
+	NewMCPToken() (string, error)
+	CheckMCP(token string) bool
 }
 
 // Controller is the controlling client's handle on the amp (*bridge.Controller).
@@ -116,8 +120,9 @@ type Server struct {
 	ctx     context.Context
 	started time.Time
 	handler http.Handler
+	mcp     *mcp.Server
 
-	uploadMu   sync.Mutex // one update upload at a time
+	uploadMu sync.Mutex // one update upload at a time
 
 	mu         sync.Mutex
 	lastUpdate update.UpdateInfo
@@ -127,6 +132,18 @@ type Server struct {
 // New creates the server. WebSocket sessions and the update watcher stop when ctx is done.
 func New(ctx context.Context, cfg Config) *Server {
 	s := &Server{Config: cfg, ctx: ctx, started: time.Now(), updateSubs: map[chan update.UpdateInfo]struct{}{}}
+	s.mcp = mcp.New(ctx, mcp.Config{
+		Version: cfg.Version,
+		Attach: func() (mcp.Controller, bool) {
+			c, ok := cfg.Amp.Attach(false)
+			if !ok {
+				return nil, false
+			}
+			return c, true
+		},
+		CheckToken: cfg.Auth.CheckMCP,
+		Log:        cfg.Log,
+	})
 	s.handler = s.routes()
 	s.RefreshUpdate()
 	go s.watchUpdates()
@@ -151,7 +168,13 @@ func (s *Server) routes() http.Handler {
 	mux.HandleFunc("POST /api/wifi/hotspot", s.authed(s.handleHotspot))
 	mux.HandleFunc("GET /api/update", s.authed(s.handleUpdateInfo))
 	mux.HandleFunc("POST /api/update", s.authed(s.handleUpdate))
+	mux.HandleFunc("POST /api/mcp/token", s.authed(s.handleMCPToken))
 	mux.HandleFunc("GET /ws", s.handleWS)
+	// GET and DELETE only get 405 (no SSE stream, no sessions) from the MCP server.
+	for _, m := range []string{"POST", "GET", "DELETE"} {
+		mux.Handle(m+" /mcp", s.mcp)
+		mux.Handle(m+" /mcp/{token}", s.mcp)
+	}
 
 	var h http.Handler = http.NewCrossOriginProtection().Handler(mux)
 	if n, ok := s.Wifi.(activityNoter); ok {
